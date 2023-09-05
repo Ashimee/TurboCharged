@@ -2,12 +2,23 @@
 (function(Scratch) {
     'use strict';
 
+    globalThis.Scratch = Scratch;
+
+    const vm = Scratch.vm;
+    const runtime = vm.runtime;
+    const categorySeparator = '<sep gap="36"/>';
+    const blockSeparator = '<sep gap="36"/>';
+    const gbx = runtime.getBlocksXML.bind(runtime);
+    const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
+    const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
+    const eventsID = 'event';
+
     //THE CREDITS
-    const cred_comment = (function(){/*this is here to get the comment*//**
-         * v5.4
-         * THIS CODE IS SOON TO BECOME OBSOLETE AND UNSUPPORTED DUE TO THE NEW RELEASE OF THE BlockType.XML BLOCK TYPE.
-         * Idea and Working injection code by Lily (OML VERY HAPPY YES SMART :d WAY SMARTER THAN ME), same with injection code :oooooo.
-         * XML Injection based on Xeltallivs.
+    const cred_comment = (function(){/*this is here to get the comment*/
+        /**
+         * v9
+         * Idea by LilyMakesThings.
+         * XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.
          * Smooshed by 0znzw
          * 
          * Color Change Attempt also by Lily, 0znzw for the XML.
@@ -29,10 +40,10 @@
          * Sensing+ (by ObviousAlexC)
          * 
          * 
+         * Lily: https://scratch.mit.edu/users/LilyMakesThings/
          * 0znzw: https://scratch.mit.edu/users/0znzw
          * Xeltalliv: https://github.com/Xeltalliv
          * CST1229: https://scratch.mit.edu/users/CST1229/
-         * Lily: https://scratch.mit.edu/users/LilyMakesThings/
          * Skyhigh173: https://github.com/SkyHigh173
          * TrueFantom: https://scratch.mit.edu/users/TrueFantom/
          * JeremyGamer13: https://scratch.mit.edu/users/JeremyGamer13/
@@ -48,7 +59,7 @@
          */
     });
 
-    const version = cred_comment.toString().split('         * ')[1].replace('\n', '').replace('v', '');
+    const version = cred_comment.toString().split('        * v')[1].replace('\n', '');
     const credits_comment = cred_comment.toString().replace('*/}', '*/').replace('function(){/*this is here to get the comment*/', '');
     window.extensionData = {
         textPlus: {
@@ -68,8 +79,7 @@
         }
     }
 
-    //useful utilities and fixed
-    const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
+    //useful utilities
     /**
      * @param {VM.Target|null} target
      * @param {string|unknown} thing
@@ -119,11 +129,14 @@
             }
         });
     }
+
     function getCategoryColor(category_id) {
-        const bubble = document.querySelector(`.scratchCategoryId-${category_id} .scratchCategoryItemBubble`);  
+        if (category_id.startsWith('event')) return {color1: "#ffd500", color2: "#cc9900"};
+        const bubble = document.querySelector(`.scratchCategoryId-${category_id} .scratchCategoryItemBubble`);
         const styles = window.getComputedStyle(bubble);
         const backgroundColor = styles.backgroundColor;
         const borderColor = styles.borderColor;
+
         function rgbToHex(rgb) {
             const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
             if (match) {
@@ -131,7 +144,10 @@
             }
             return rgb;
         }
-        return {color1: rgbToHex(backgroundColor), color2: rgbToHex(borderColor)};
+        return {
+            color1: rgbToHex(backgroundColor),
+            color2: rgbToHex(borderColor)
+        };
     }
 
     function cbto(a) {
@@ -171,202 +187,202 @@
 
     class TurboChargedMotion {
         getInfo() {
-                return {
-                    id: 'motion',
-                    name: 'Motion 🪄',
-                    color1: '#4C97FF',
-                    color2: '#3373CC',
-                    blocks: [
-                        /* this block of code is for the credits category */
-                        {
-                            //buttons dont need color change.
-                            blockType: Scratch.BlockType.BUTTON,
-                            text: 'Credits',
-                            func: 'credit',
-                        }, {
+            return {
+                id: 'motion',
+                name: 'Motion 🪄',
+                color1: getCategoryColor('motion').color1,
+                color2: getCategoryColor('motion').color2,
+                blocks: [
+                    /* this block of code is for the credits category */
+                    {
+                        //buttons dont need color change.
+                        blockType: Scratch.BlockType.BUTTON,
+                        text: 'Credits',
+                        func: 'credit',
+                    }, {
 
-                            disableMonitor: true,
-                            opcode: 'credit_version',
-                            func: 'credit_version',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'TurboCharged Version',
-                            isDynamic: true,
-                            color1: '#ffb6c1'
-                        },
-                        /* end credit blocks and start motion */
-                        {
-                            opcode: 'rotationStyle',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'rotation style'
-                        }, {
-                            opcode: 'moremotionchangexy',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'change x: [X] y: [Y]',
-                            arguments: {
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotionpointto',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'point towards x: [X] y: [Y]',
-                            arguments: {
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotionfence',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'manually fence'
-                        }, {
-                            opcode: 'moremotionsteptowards',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'move [STEPS] steps towards x: [X] y: [Y]',
-                            arguments: {
-                                STEPS: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '10'
-                                },
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotiontweentowards',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'move [PERCENT]% of the way to x: [X] y: [Y]',
-                            arguments: {
-                                PERCENT: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '10'
-                                },
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotiondirectionto',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'direction to x: [X] y: [Y]',
-                            arguments: {
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotiondistanceto',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'distance from x: [X] y: [Y]',
-                            arguments: {
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotionspritewh',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'sprite [WHAT]',
-                            disableMonitor: true,
-                            arguments: {
-                                WHAT: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'moremotionWHAT'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotiontouchingxy',
-                            blockType: Scratch.BlockType.BOOLEAN,
-                            text: 'touching x: [X] y: [Y]?',
-                            arguments: {
-                                X: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                },
-                                Y: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '0'
-                                }
-                            }
-                        }, {
-                            opcode: 'moremotiontouchingrect',
-                            blockType: Scratch.BlockType.BOOLEAN,
-                            text: 'touching rectangle x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]?',
-                            arguments: {
-                                X1: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '-100'
-                                },
-                                Y1: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '-100'
-                                },
-                                X2: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '100'
-                                },
-                                Y2: {
-                                    type: Scratch.ArgumentType.NUMBER,
-                                    defaultValue: '100'
-                                }
+                        disableMonitor: true,
+                        opcode: 'credit_version',
+                        func: 'credit_version',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'TurboCharged Version',
+                        isDynamic: true,
+                        color1: '#ffb6c1'
+                    },
+                    /* end credit blocks and start motion */
+                    {
+                        opcode: 'rotationStyle',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'rotation style'
+                    }, {
+                        opcode: 'moremotionchangexy',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'change x: [X] y: [Y]',
+                        arguments: {
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
                             }
                         }
-                    ],
-                    menus: {
-                        moremotionWHAT: {
-                            acceptreporters: true,
-                            items: [
-                                'width', 'height', 'costume width', 'costume height'
-                            ]
+                    }, {
+                        opcode: 'moremotionpointto',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'point towards x: [X] y: [Y]',
+                        arguments: {
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            }
                         }
+                    }, {
+                        opcode: 'moremotionfence',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'manually fence'
+                    }, {
+                        opcode: 'moremotionsteptowards',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'move [STEPS] steps towards x: [X] y: [Y]',
+                        arguments: {
+                            STEPS: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '10'
+                            },
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            }
+                        }
+                    }, {
+                        opcode: 'moremotiontweentowards',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'move [PERCENT]% of the way to x: [X] y: [Y]',
+                        arguments: {
+                            PERCENT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '10'
+                            },
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            }
+                        }
+                    }, {
+                        opcode: 'moremotiondirectionto',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'direction to x: [X] y: [Y]',
+                        arguments: {
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            }
+                        }
+                    }, {
+                        opcode: 'moremotiondistanceto',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'distance from x: [X] y: [Y]',
+                        arguments: {
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            }
+                        }
+                    }, {
+                        opcode: 'moremotionspritewh',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'sprite [WHAT]',
+                        disableMonitor: true,
+                        arguments: {
+                            WHAT: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'moremotionWHAT'
+                            }
+                        }
+                    }, {
+                        opcode: 'moremotiontouchingxy',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'touching x: [X] y: [Y]?',
+                        arguments: {
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '0'
+                            }
+                        }
+                    }, {
+                        opcode: 'moremotiontouchingrect',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'touching rectangle x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]?',
+                        arguments: {
+                            X1: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '-100'
+                            },
+                            Y1: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '-100'
+                            },
+                            X2: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '100'
+                            },
+                            Y2: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '100'
+                            }
+                        }
+                    }
+                ],
+                menus: {
+                    moremotionWHAT: {
+                        acceptreporters: true,
+                        items: [
+                            'width', 'height', 'costume width', 'costume height'
+                        ]
                     }
                 }
             }
-            /* this block of code is for the credits category */
+        }
+        /* this block of code is for the credits category */
         doNothing() {}
         credit() {
             credits_blob();
         }
         credit_version() {
-                return parseInt(version.toString());
-            }
-            /* end credit blocks and start motion */
+            return parseInt(version.toString());
+        }
+        /* end credit blocks and start motion */
 
         rotationStyle(args, util) {
-                return util.target.rotationStyle;
-            }
-            //more motion extension
+            return util.target.rotationStyle;
+        }
+        //more motion extension
         moremotionchangexy(args, util) {
             const x = Scratch.Cast.toNumber(args.X);
             const y = Scratch.Cast.toNumber(args.Y);
@@ -494,23 +510,23 @@
         }
 
         moremotionspritewh(args, util) {
-                if (args.WHAT === 'width' || args.WHAT === 'height') {
-                    const bounds = Scratch.vm.renderer.getBounds(util.target.drawableID);
-                    if (args.WHAT === 'width') {
-                        return Math.ceil(bounds.width);
-                    } else {
-                        return Math.ceil(bounds.height);
-                    }
-                } else if (args.WHAT === 'costume width' || args.WHAT === 'costume height') {
-                    const costume = util.target.sprite.costumes[util.target.currentCostume];
-                    if (args.WHAT === 'costume width') {
-                        return Math.ceil(costume.size[0]);
-                    } else {
-                        return Math.ceil(costume.size[1]);
-                    }
+            if (args.WHAT === 'width' || args.WHAT === 'height') {
+                const bounds = Scratch.vm.renderer.getBounds(util.target.drawableID);
+                if (args.WHAT === 'width') {
+                    return Math.ceil(bounds.width);
+                } else {
+                    return Math.ceil(bounds.height);
+                }
+            } else if (args.WHAT === 'costume width' || args.WHAT === 'costume height') {
+                const costume = util.target.sprite.costumes[util.target.currentCostume];
+                if (args.WHAT === 'costume width') {
+                    return Math.ceil(costume.size[0]);
+                } else {
+                    return Math.ceil(costume.size[1]);
                 }
             }
-            //end block
+        }
+        //end block
     }
 
     class TurboChargedCredits {
@@ -530,8 +546,8 @@
             return {
                 id: 'looks',
                 name: 'Looks 🪄',
-                color1: '#4C97FF',
-                color2: '#3373CC',
+                color1: getCategoryColor('looks').color1,
+                color2: getCategoryColor('looks').color2,
                 blocks: []
             }
         }
@@ -542,8 +558,8 @@
             return {
                 id: 'sensing',
                 name: 'Sensing 🪄',
-                colour: "#4CBFE6",
-                secondaryColour: "#2E8EB8",
+                color1: getCategoryColor('sensing').color1,
+                color2: getCategoryColor('sensing').color2,
                 blocks: []
             }
         }
@@ -554,325 +570,1093 @@
             return {
                 id: 'sound',
                 name: 'Sound 🪄',
-                colour: "#D65CD6",
-                secondaryColour: "#BD42BD",
+                color1: getCategoryColor('sound').color1,
+                color2: getCategoryColor('sound').color1,
                 blocks: []
             }
         }
     }
 
+
+    const stopIcon =
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAQlBMVEUAAAC/UFC8Q0OzTU24SEi4SEi3SEi4R0e4SEi4SEi4SEi4SEi7SUm8SUnMTk7MT0/OT0/PT0/gVVXiVVXsWVn///+CoOd2AAAAC3RSTlMAEBMUu7zLz9D8/dIXnJwAAAABYktHRBXl2PmjAAAAxklEQVRIx+3WwRKDIBAD0JWqVEOtWv7/W3twOqKwELzW3N9wYhORMMYiztgZUZMUAKxqmh5Kno/MG256nzI59Z2mB+BWH+XzUt5RhWoyQjFZkTQFkTBFERlCnAwlDoYUgaHFblpaeL86AK0MvNjMIABmT2cGIAAWniw3ucm/k9ovduEjXzgXtUfJmtrTt9VZzYH9FSB/xvfKZMsiLFmuko61zBTfucjL9RpXf6nEU2MhPxXS86J+kORmjz6V6seViOnG8oT7ApMcjsYZwhXCAAAAAElFTkSuQmCC";
+
+    // Source:
+    // https://github.com/TurboWarp/scratch-vm/blob/develop/src/io/keyboard.js
+    // https://github.com/TurboWarp/scratch-blocks/blob/develop/blocks_vertical/event.js
+    const validKeyboardInputs = [
+        // Special Inputs
+        {
+            text: "space",
+            value: "space"
+        },
+        {
+            text: "up arrow",
+            value: "up arrow"
+        },
+        {
+            text: "down arrow",
+            value: "down arrow"
+        },
+        {
+            text: "right arrow",
+            value: "right arrow"
+        },
+        {
+            text: "left arrow",
+            value: "left arrow"
+        },
+        {
+            text: "enter",
+            value: "enter"
+        },
+        // TW: Extra Special Inputs
+        {
+            text: "backspace",
+            value: "backspace"
+        },
+        {
+            text: "delete",
+            value: "delete"
+        },
+        {
+            text: "shift",
+            value: "shift"
+        },
+        {
+            text: "caps lock",
+            value: "caps lock"
+        },
+        {
+            text: "scroll lock",
+            value: "scroll lock"
+        },
+        {
+            text: "control",
+            value: "control"
+        },
+        {
+            text: "escape",
+            value: "escape"
+        },
+        {
+            text: "insert",
+            value: "insert"
+        },
+        {
+            text: "home",
+            value: "home"
+        },
+        {
+            text: "end",
+            value: "end"
+        },
+        {
+            text: "page up",
+            value: "page up"
+        },
+        {
+            text: "page down",
+            value: "page down"
+        },
+        // Letter Keyboard Inputs
+        {
+            text: "a",
+            value: "a"
+        },
+        {
+            text: "b",
+            value: "b"
+        },
+        {
+            text: "c",
+            value: "c"
+        },
+        {
+            text: "d",
+            value: "d"
+        },
+        {
+            text: "e",
+            value: "e"
+        },
+        {
+            text: "f",
+            value: "f"
+        },
+        {
+            text: "g",
+            value: "g"
+        },
+        {
+            text: "h",
+            value: "h"
+        },
+        {
+            text: "i",
+            value: "i"
+        },
+        {
+            text: "j",
+            value: "j"
+        },
+        {
+            text: "k",
+            value: "k"
+        },
+        {
+            text: "l",
+            value: "l"
+        },
+        {
+            text: "m",
+            value: "m"
+        },
+        {
+            text: "n",
+            value: "n"
+        },
+        {
+            text: "o",
+            value: "o"
+        },
+        {
+            text: "p",
+            value: "p"
+        },
+        {
+            text: "q",
+            value: "q"
+        },
+        {
+            text: "r",
+            value: "r"
+        },
+        {
+            text: "s",
+            value: "s"
+        },
+        {
+            text: "t",
+            value: "t"
+        },
+        {
+            text: "u",
+            value: "u"
+        },
+        {
+            text: "v",
+            value: "v"
+        },
+        {
+            text: "w",
+            value: "w"
+        },
+        {
+            text: "x",
+            value: "x"
+        },
+        {
+            text: "y",
+            value: "y"
+        },
+        {
+            text: "z",
+            value: "z"
+        },
+        // Number Keyboard Inputs
+        {
+            text: "0",
+            value: "0"
+        },
+        {
+            text: "1",
+            value: "1"
+        },
+        {
+            text: "2",
+            value: "2"
+        },
+        {
+            text: "3",
+            value: "3"
+        },
+        {
+            text: "4",
+            value: "4"
+        },
+        {
+            text: "5",
+            value: "5"
+        },
+        {
+            text: "6",
+            value: "6"
+        },
+        {
+            text: "7",
+            value: "7"
+        },
+        {
+            text: "8",
+            value: "8"
+        },
+        {
+            text: "9",
+            value: "9"
+        },
+    ];
+
+    var lastValues = {};
+    var runTimer = 0;
     class TurboChargedEvents {
+        constructor() {
+            // Stop Sign Clicked contributed by @CST1229
+            runtime.shouldExecuteStopClicked = true;
+            runtime.on("BEFORE_EXECUTE", () => {
+                runTimer++;
+                runtime.shouldExecuteStopClicked = false;
+
+                runtime.startHats(eventsID + "_MoreEventsforever");
+                runtime.startHats(eventsID + "_MoreEventswhileTrueFalse");
+                runtime.startHats(eventsID + "_MoreEventswhenValueChanged");
+                runtime.startHats(eventsID + "_MoreEventseveryDuration");
+                runtime.startHats(eventsID + "_MoreEventswhileKeyPressed");
+            });
+            runtime.on("PROJECT_START", () => {
+                runTimer = 0;
+            });
+            runtime.on("PROJECT_STOP_ALL", () => {
+                runTimer = 0;
+                if (runtime.shouldExecuteStopClicked)
+                    queueMicrotask(() =>
+                        runtime.startHats(eventsID + "_MoreEventswhenStopClicked")
+                    );
+            });
+            runtime.on("AFTER_EXECUTE", () => {
+                runtime.shouldExecuteStopClicked = true;
+            });
+            const originalGreenFlag = vm.greenFlag;
+            vm.greenFlag = function() {
+                runtime.shouldExecuteStopClicked = false;
+                originalGreenFlag.call(this);
+            };
+        }
         getInfo() {
             return {
-                id: 'event',
+                id: eventsID,
                 name: 'Events 🪄',
-                colour: "#FFD500",
-                secondaryColour: "#CC9900",
-                blocks: []
+                color1: getCategoryColor('events').color1,
+                color2: getCategoryColor('events').color2,
+                blocks: [{
+                        opcode: "MoreEventswhenStopClicked",
+                        blockType: Scratch.BlockType.EVENT,
+                        text: "when [STOP] clicked",
+                        isEdgeActivated: false,
+                        arguments: {
+                            STOP: {
+                                type: Scratch.ArgumentType.IMAGE,
+                                dataURI: stopIcon,
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEventsforever",
+                        blockType: Scratch.BlockType.EVENT,
+                        text: "forever",
+                        isEdgeActivated: false,
+                    },
+                    {
+                        opcode: "MoreEventswhenTrueFalse",
+                        blockType: Scratch.BlockType.HAT,
+                        text: "when [CONDITION] becomes [STATE]",
+                        isEdgeActivated: true,
+                        arguments: {
+                            CONDITION: {
+                                type: Scratch.ArgumentType.BOOLEAN,
+                            },
+                            STATE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "boolean",
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEventswhileTrueFalse",
+                        blockType: Scratch.BlockType.HAT,
+                        text: "while [CONDITION] is [STATE]",
+                        isEdgeActivated: false,
+                        arguments: {
+                            CONDITION: {
+                                type: Scratch.ArgumentType.BOOLEAN,
+                            },
+                            STATE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "boolean",
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEventswhenValueChanged",
+                        blockType: Scratch.BlockType.HAT,
+                        text: "when [INPUT] is changed",
+                        isEdgeActivated: false,
+                        arguments: {
+                            INPUT: {
+                                // Intentional:
+                                // Encourages people to place a block
+                                // (as opposed to typing a value)
+                                type: null,
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEventseveryDuration",
+                        blockType: Scratch.BlockType.HAT,
+                        text: "every [DURATION] frames",
+                        isEdgeActivated: false,
+                        arguments: {
+                            DURATION: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 3,
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEventswhenKeyAction",
+                        blockType: Scratch.BlockType.HAT,
+                        text: "when [KEY_OPTION] key [ACTION]",
+                        isEdgeActivated: true,
+                        arguments: {
+                            KEY_OPTION: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "space",
+                                menu: "keyboardButtons",
+                            },
+                            ACTION: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "action",
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEventswhileKeyPressed",
+                        blockType: Scratch.BlockType.HAT,
+                        text: "while [KEY_OPTION] key pressed",
+                        isEdgeActivated: false,
+                        arguments: {
+                            KEY_OPTION: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "space",
+                                menu: "keyboardButtons",
+                            },
+                        },
+                    },
+                    {
+                        opcode: "MoreEvents_broadcastToTarget",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "broadcast [BROADCAST_OPTION] to [TARGET]",
+                        arguments: {
+                            BROADCAST_OPTION: {
+                                type: null,
+                            },
+                            TARGET: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "targetMenu",
+                            },
+                        },
+                        hideFromPalette: true,
+                    },
+                    {
+                        opcode: "MoreEvents_broadcastToTargetAndWait",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "broadcast [BROADCAST_OPTION] to [TARGET] and wait",
+                        arguments: {
+                            BROADCAST_OPTION: {
+                                type: null,
+                            },
+                            TARGET: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "targetMenu",
+                            },
+                        },
+                        hideFromPalette: true,
+                    },
+                    {
+                        opcode: "MoreEvents_broadcastData",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "broadcast [BROADCAST_OPTION] with data [DATA]",
+                        arguments: {
+                            BROADCAST_OPTION: {
+                                type: null,
+                            },
+                            DATA: {
+                                type: Scratch.ArgumentType.STRING,
+                            },
+                        },
+                        hideFromPalette: true,
+                    },
+                    {
+                        opcode: "MoreEvents_broadcastDataAndWait",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "broadcast [BROADCAST_OPTION] with data [DATA] and wait",
+                        arguments: {
+                            BROADCAST_OPTION: {
+                                type: null,
+                            },
+                            DATA: {
+                                type: Scratch.ArgumentType.STRING,
+                            },
+                        },
+                        hideFromPalette: true,
+                    },
+                    {
+                        blockType: Scratch.BlockType.XML,
+                        xml: `<block type="${eventsID}_MoreEvents_broadcastToTarget">
+                    <value name="BROADCAST_OPTION">
+                        <shadow type="event_broadcast_menu"></shadow>
+                    </value>
+                    <value name="TARGET">
+                        <shadow type="${eventsID}_menu_targetMenu"></shadow>
+                    </value>
+                </block>
+                <block type="${eventsID}_MoreEvents_broadcastToTargetAndWait">
+                    <value name="BROADCAST_OPTION">
+                        <shadow type="event_broadcast_menu"></shadow>
+                    </value>
+                    <value name="TARGET">
+                        <shadow type="${eventsID}_menu_targetMenu"></shadow>
+                    </value>
+                </block>
+                <sep gap="36"/>
+                <block type="${eventsID}_MoreEvents_broadcastData">
+                    <value name="BROADCAST_OPTION">
+                        <shadow type="event_broadcast_menu"></shadow>
+                    </value>
+                    <value name="DATA">
+                        <shadow type="text"></shadow>
+                    </value>
+                </block>
+                <block type="${eventsID}_MoreEvents_broadcastDataAndWait">
+                    <value name="BROADCAST_OPTION">
+                        <shadow type="event_broadcast_menu"></shadow>
+                    </value>
+                    <value name="DATA">
+                        <shadow type="text"></shadow>
+                    </value>
+                </block>`,
+                    },
+                    {
+                        opcode: "MoreEventsreceivedData",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "received data",
+                        disableMonitor: true,
+                        allowDropAnywhere: true,
+                    },
+                    {
+                        opcode: "MoreEvents_broadcastDataToTarget",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "broadcast [BROADCAST_OPTION] to [TARGET] with data [DATA]",
+                        func: "MoreEvents_broadcastToTarget",
+                        arguments: {
+                            BROADCAST_OPTION: {
+                                type: null,
+                            },
+                            TARGET: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "targetMenu",
+                            },
+                            DATA: {
+                                type: Scratch.ArgumentType.STRING,
+                            },
+                        },
+                        hideFromPalette: true,
+                    },
+                    {
+                        opcode: "MoreEvents_broadcastDataToTargetAndWait",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "broadcast [BROADCAST_OPTION] to [TARGET] with data [DATA] and wait",
+                        func: "MoreEvents_broadcastToTargetAndWait",
+                        arguments: {
+                            BROADCAST_OPTION: {
+                                type: null,
+                            },
+                            TARGET: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "targetMenu",
+                            },
+                            DATA: {
+                                type: Scratch.ArgumentType.STRING,
+                            },
+                        },
+                        hideFromPalette: true,
+                    },
+                    {
+                        blockType: Scratch.BlockType.XML,
+                        xml: `<block type="${eventsID}_MoreEvents_broadcastDataToTarget">
+                    <value name="BROADCAST_OPTION">
+                        <shadow type="event_broadcast_menu"></shadow>
+                    </value>
+                    <value name="TARGET">
+                        <shadow type="${eventsID}_menu_targetMenu"></shadow>
+                    </value>
+                    <value name="DATA">
+                        <shadow type="text"></shadow>
+                    </value>
+                </block>
+                <block type="${eventsID}_MoreEvents_broadcastDataToTargetAndWait">
+                    <value name="BROADCAST_OPTION">
+                        <shadow type="event_broadcast_menu"></shadow>
+                    </value>
+                    <value name="TARGET">
+                        <shadow type="${eventsID}_menu_targetMenu"></shadow>
+                    </value>
+                    <value name="DATA">
+                        <shadow type="text"></shadow>
+                    </value>
+                </block>`,
+                    }
+                ],
+                menus: {
+                    // Targets have acceptReporters: true
+                    targetMenu: {
+                        acceptReporters: true,
+                        items: "_getTargets",
+                    },
+                    keyboardButtons: {
+                        acceptReporters: true,
+                        items: validKeyboardInputs,
+                    },
+                    // Attributes have acceptReporters: false
+                    action: {
+                        acceptReporters: false,
+                        items: ["hit", "released"],
+                    },
+                    boolean: {
+                        acceptReporters: false,
+                        items: ["true", "false"],
+                    },
+                    state: {
+                        acceptReporters: false,
+                        items: ["enabled", "disabled"],
+                    },
+                },
+            }
+        }
+
+        MoreEventswhenTrueFalse(args) {
+            return args.STATE === "true" ? args.CONDITION : !args.CONDITION;
+        }
+
+        MoreEventswhileTrueFalse(args) {
+            return args.STATE === "true" ? args.CONDITION : !args.CONDITION;
+        }
+
+        MoreEventswhenValueChanged(args, util) {
+            const blockId = util.thread.peekStack();
+            if (!lastValues[blockId])
+                lastValues[blockId] = Scratch.Cast.toString(args.INPUT);
+            if (lastValues[blockId] !== Scratch.Cast.toString(args.INPUT)) {
+                lastValues[blockId] = Scratch.Cast.toString(args.INPUT);
+                return true;
+            }
+            return false;
+        }
+
+        MoreEventseveryDuration(args, util) {
+            const duration = Math.max(
+                Math.round(Scratch.Cast.toNumber(args.DURATION)),
+                0
+            );
+            return !!(runTimer % duration === 0);
+        }
+
+        MoreEventswhenKeyAction(args, util) {
+            const key = Scratch.Cast.toString(args.KEY_OPTION).toLowerCase();
+            const pressed = util.ioQuery("keyboard", "getKeyIsDown", [key]);
+            return args.ACTION === "released" ? !pressed : pressed;
+        }
+
+        MoreEventswhileKeyPressed(args, util) {
+            const key = Scratch.Cast.toString(args.KEY_OPTION).toLowerCase();
+            return util.ioQuery("keyboard", "getKeyIsDown", [key]);
+        }
+
+        MoreEvents_broadcastToTarget(args, util) {
+            const broadcastOption = Scratch.Cast.toString(args.BROADCAST_OPTION);
+            if (!broadcastOption) return;
+
+            const data = Scratch.Cast.toString(args.DATA);
+            console.log(data);
+
+            const cloneTargets = this._getTargetFromMenu(args.TARGET).sprite.clones;
+            let startedThreads = [];
+
+            for (const clone of cloneTargets) {
+                startedThreads = [
+                    ...startedThreads,
+                    ...util.startHats(
+                        "event_whenbroadcastreceived", {
+                            BROADCAST_OPTION: broadcastOption,
+                        },
+                        clone
+                    ),
+                ];
+                if (data) {
+                    startedThreads.forEach((thread) => (thread.receivedData = args.DATA));
+                }
+            }
+        }
+
+        MoreEvents_broadcastToTargetAndWait(args, util) {
+            if (!util.stackFrame.broadcastVar) {
+                util.stackFrame.broadcastVar = Scratch.Cast.toString(
+                    args.BROADCAST_OPTION
+                );
+            }
+
+            const spriteTarget = this._getTargetFromMenu(args.TARGET);
+            if (!spriteTarget) return;
+            const cloneTargets = spriteTarget.sprite.clones;
+
+            const data = Scratch.Cast.toString(args.DATA);
+
+            if (util.stackFrame.broadcastVar) {
+                const broadcastOption = util.stackFrame.broadcastVar;
+                if (!util.stackFrame.startedThreads) {
+                    util.stackFrame.startedThreads = [];
+                    for (const clone of cloneTargets) {
+                        util.stackFrame.startedThreads = [
+                            ...util.stackFrame.startedThreads,
+                            ...util.startHats(
+                                "event_whenbroadcastreceived", {
+                                    BROADCAST_OPTION: broadcastOption,
+                                },
+                                clone
+                            ),
+                        ];
+                        if (data) {
+                            util.stackFrame.startedThreads.forEach(
+                                (thread) => (thread.receivedData = args.DATA)
+                            );
+                        }
+                    }
+                    if (util.stackFrame.startedThreads.length === 0) {
+                        return;
+                    }
+                }
+
+                const waiting = util.stackFrame.startedThreads.some(
+                    (thread) => runtime.threads.indexOf(thread) !== -1
+                );
+                if (waiting) {
+                    if (
+                        util.stackFrame.startedThreads.every((thread) =>
+                            runtime.isWaitingThread(thread)
+                        )
+                    ) {
+                        util.yieldTick();
+                    } else {
+                        util.yield();
+                    }
+                }
+            }
+        }
+
+        MoreEvents_broadcastData(args, util) {
+            const broadcast = Scratch.Cast.toString(args.BROADCAST_OPTION);
+            if (!broadcast) return;
+
+            const data = Scratch.Cast.toString(args.DATA);
+
+            let threads = util.startHats("event_whenbroadcastreceived", {
+                BROADCAST_OPTION: broadcast,
+            });
+            threads.forEach((thread) => (thread.receivedData = data));
+        }
+
+        MoreEvents_broadcastDataAndWait(args, util) {
+            const data = Scratch.Cast.toString(args.DATA);
+
+            if (!util.stackFrame.broadcastVar) {
+                util.stackFrame.broadcastVar = Scratch.Cast.toString(
+                    args.BROADCAST_OPTION
+                );
+            }
+
+            if (util.stackFrame.broadcastVar) {
+                const broadcastOption = util.stackFrame.broadcastVar;
+                if (!util.stackFrame.startedThreads) {
+                    util.stackFrame.startedThreads = util.startHats(
+                        "event_whenbroadcastreceived", {
+                            BROADCAST_OPTION: broadcastOption,
+                        }
+                    );
+                    if (util.stackFrame.startedThreads.length === 0) {
+                        return;
+                    } else {
+                        util.stackFrame.startedThreads.forEach(
+                            (thread) => (thread.receivedData = data)
+                        );
+                    }
+                }
+
+                const waiting = util.stackFrame.startedThreads.some(
+                    (thread) => runtime.threads.indexOf(thread) !== -1
+                );
+                if (waiting) {
+                    if (
+                        util.stackFrame.startedThreads.every((thread) =>
+                            runtime.isWaitingThread(thread)
+                        )
+                    ) {
+                        util.yieldTick();
+                    } else {
+                        util.yield();
+                    }
+                }
+            }
+        }
+
+        MoreEventsreceivedData(args, util) {
+            const received = util.thread.receivedData;
+            return received ? received : "";
+        }
+
+        _getTargetFromMenu(targetName) {
+            let target = Scratch.vm.runtime.getSpriteTargetByName(targetName);
+            if (targetName === "_stage_") target = runtime.getTargetForStage();
+            return target;
+        }
+
+        _getTargets() {
+            const spriteNames = [{
+                text: "Stage",
+                value: "_stage_"
+            }];
+            const targets = Scratch.vm.runtime.targets;
+            for (let index = 1; index < targets.length; index++) {
+                const target = targets[index];
+                if (target.isOriginal) {
+                    const targetName = target.getName();
+                    spriteNames.push({
+                        text: targetName,
+                        value: targetName,
+                    });
+                }
+            }
+            if (spriteNames.length > 0) {
+                return spriteNames;
+            } else {
+                return [{
+                    text: "",
+                    value: 0
+                }]; //this should never happen but it's a failsafe
             }
         }
     }
 
     class TurboChargedControl {
         getInfo() {
-                return {
-                    id: 'control',
-                    name: 'Control 🪄',
-                    colour: "#FFAB19",
-                    secondaryColour: "#CF8B17",
-                    blocks: [{
-                            opcode: 'clonespluswhenCloneStartsWithVar',
-                            blockType: Scratch.BlockType.HAT,
-                            text: 'when I start as a clone with [INPUTA] set to [INPUTB]',
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonespluscreateCloneWithVar',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'create clone with [INPUTA] set to [INPUTB]',
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        },
-
-                        {
-                            opcode: 'clonesplustouchingCloneWithVar',
-                            blockType: Scratch.BlockType.BOOLEAN,
-                            text: 'touching clone with [INPUTA] set to [INPUTB]?',
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplustouchingMainSprite',
-                            blockType: Scratch.BlockType.BOOLEAN,
-                            text: 'touching main sprite?',
-                        },
-
-                        {
-                            opcode: 'clonesplussetVariableOfClone',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'set variable [INPUTA] to [INPUTB] for clones with [INPUTC] set to [INPUTD]',
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '0'
-                                },
-                                INPUTC: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTD: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusgetVariableOfClone',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'variable [INPUTA] of clone with [INPUTB] set to [INPUTC]',
-
-                            disableMonitor: true,
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTC: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplussetVariableOfMainSprite',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'set variable [INPUTA] to [INPUTB] for main sprite',
-
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusgetVariableOfMainSprite',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'variable [INPUT] of main sprite',
-
-                            disableMonitor: true,
-                            arguments: {
-                                INPUT: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                }
-                            }
-                        },
-
-                        {
-                            opcode: 'clonespluscloneExists',
-                            blockType: Scratch.BlockType.BOOLEAN,
-                            text: 'clone with [INPUTA] set to [INPUTB] exists?',
-
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusgetThingOfClone',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: '[INPUTA] of clone with [INPUTB] set to [INPUTC]',
-
-                            disableMonitor: true,
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: 'x position',
-                                    menu: 'thingOfMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTC: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusgetThingOfMainSprite',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: '[INPUT] of main sprite',
-
-                            disableMonitor: true,
-                            arguments: {
-                                INPUT: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: 'x position',
-                                    menu: 'thingOfMenu'
-                                }
-                            }
-                        },
-
-                        {
-                            opcode: 'clonesplusstopScriptsInSprite',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'stop scripts in [INPUT]',
-                            arguments: {
-                                INPUT: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'spriteMenu'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusstopScriptsInClone',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'stop scripts in clones with [INPUTA] set to [INPUTB]',
-
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusstopScriptsInMainSprite',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'stop scripts in main sprite',
-                        },
-
-                        {
-                            opcode: 'clonesplusdeleteClonesInSprite',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'delete clones in [INPUT]',
-                            arguments: {
-                                INPUT: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'spriteMenu'
-                                }
-                            }
-                        }, {
-                            opcode: 'clonesplusdeleteCloneWithVar',
-                            blockType: Scratch.BlockType.COMMAND,
-                            text: 'delete clones with [INPUTA] set to [INPUTB]',
-
-                            arguments: {
-                                INPUTA: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'variablesMenu'
-                                },
-                                INPUTB: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    defaultValue: '1'
-                                }
-                            }
-                        },
-
-                        {
-                            opcode: 'clonesplusisClone',
-                            blockType: Scratch.BlockType.BOOLEAN,
-                            text: 'is clone?',
-
-                        },
-
-                        {
-                            opcode: 'clonespluscloneCount',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'clone count'
-                        }, {
-                            opcode: 'clonesplusspriteCloneCount',
-                            blockType: Scratch.BlockType.REPORTER,
-                            text: 'clone count of [INPUT]',
-                            disableMonitor: true,
-                            arguments: {
-                                INPUT: {
-                                    type: Scratch.ArgumentType.STRING,
-                                    menu: 'spriteMenu'
-                                }
+            return {
+                id: 'control',
+                name: 'Control 🪄',
+                color1: getCategoryColor('control').color1,
+                color2: getCategoryColor('control').color2,
+                blocks: [{
+                        opcode: 'clonespluswhenCloneStartsWithVar',
+                        blockType: Scratch.BlockType.HAT,
+                        text: 'when I start as a clone with [INPUTA] set to [INPUTB]',
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
                             }
                         }
-                    ],
-                    menus: {
-                        spriteMenu: {
-                            acceptReporters: true,
-                            items: 'getSprites'
-                        },
-                        // menus use acceptReporters: false for Scratch parity
-                        variablesMenu: {
-                            acceptReporters: false,
-                            items: 'getVariables'
-                        },
-                        thingOfMenu: {
-                            acceptReporters: false,
-                            items: [{
-                                text: 'x position',
-                                value: 'x position'
-                            }, {
-                                text: 'y position',
-                                value: 'y position'
-                            }, {
-                                text: 'direction',
-                                value: 'direction'
-                            }, {
-                                text: 'costume #',
-                                value: 'costume num'
-                            }, {
-                                text: 'costume name',
-                                value: 'costume name'
-                            }, {
-                                text: 'size',
-                                value: 'size'
-                            }, {
-                                text: 'volume',
-                                value: 'volume'
-                            }, ]
+                    }, {
+                        opcode: 'clonespluscreateCloneWithVar',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'create clone with [INPUTA] set to [INPUTB]',
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
                         }
+                    },
+                    {
+                        opcode: 'clonesplustouchingCloneWithVar',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'touching clone with [INPUTA] set to [INPUTB]?',
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplustouchingMainSprite',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'touching main sprite?',
+                    },
+
+                    {
+                        opcode: 'clonesplussetVariableOfClone',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'set variable [INPUTA] to [INPUTB] for clones with [INPUTC] set to [INPUTD]',
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0'
+                            },
+                            INPUTC: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTD: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplusgetVariableOfClone',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'variable [INPUTA] of clone with [INPUTB] set to [INPUTC]',
+
+                        disableMonitor: true,
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTC: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplussetVariableOfMainSprite',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'set variable [INPUTA] to [INPUTB] for main sprite',
+
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplusgetVariableOfMainSprite',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'variable [INPUT] of main sprite',
+
+                        disableMonitor: true,
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            }
+                        }
+                    },
+
+                    {
+                        opcode: 'clonespluscloneExists',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'clone with [INPUTA] set to [INPUTB] exists?',
+
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplusgetThingOfClone',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[INPUTA] of clone with [INPUTB] set to [INPUTC]',
+                        disableMonitor: true,
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'x position',
+                                menu: 'thingOfMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTC: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplusgetThingOfMainSprite',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[INPUT] of main sprite',
+
+                        disableMonitor: true,
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'x position',
+                                menu: 'thingOfMenu'
+                            }
+                        }
+                    },
+
+                    {
+                        opcode: 'clonesplusstopScriptsInSprite',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'stop scripts in [INPUT]',
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'spriteMenu'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplusstopScriptsInClone',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'stop scripts in clones with [INPUTA] set to [INPUTB]',
+
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    }, {
+                        opcode: 'clonesplusstopScriptsInMainSprite',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'stop scripts in main sprite',
+                    },
+
+                    {
+                        opcode: 'clonesplusdeleteClonesInSprite',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'delete clones in [INPUT]',
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'spriteMenu'
+                            }
+                        },
+                        text: 'is clone?'
+                    }, {
+                        opcode: 'clonesplusdeleteCloneWithVar',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'delete clones with [INPUTA] set to [INPUTB]',
+
+                        arguments: {
+                            INPUTA: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'variablesMenu'
+                            },
+                            INPUTB: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '1'
+                            }
+                        }
+                    },
+
+                    {
+                        opcode: 'clonesplusisClone',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                    },
+
+                    {
+                        opcode: 'clonespluscloneCount',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'clone count',
+                        text: 'is clone?',
+                        isDynamic: true,
+                        color1: getCategoryColor('control').color1,
+                        color2: getCategoryColor('control').color2
+                    }, {
+                        opcode: 'clonesplusspriteCloneCount',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'clone count of [INPUT]',
+                        disableMonitor: true,
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'spriteMenu'
+                            }
+                        }
+                    }
+                ],
+                menus: {
+                    spriteMenu: {
+                        acceptReporters: true,
+                        items: 'getSprites'
+                    },
+                    // menus use acceptReporters: false for Scratch parity
+                    variablesMenu: {
+                        acceptReporters: false,
+                        items: 'getVariables'
+                    },
+                    thingOfMenu: {
+                        acceptReporters: false,
+                        items: [{
+                            text: 'x position',
+                            value: 'x position'
+                        }, {
+                            text: 'y position',
+                            value: 'y position'
+                        }, {
+                            text: 'direction',
+                            value: 'direction'
+                        }, {
+                            text: 'costume #',
+                            value: 'costume num'
+                        }, {
+                            text: 'costume name',
+                            value: 'costume name'
+                        }, {
+                            text: 'size',
+                            value: 'size'
+                        }, {
+                            text: 'volume',
+                            value: 'volume'
+                        }, ]
                     }
                 }
             }
-            //clonesplus extension
+        }
+        //clonesplus extension
         clonespluswhenCloneStartsWithVar(args, util) {
             // TODO: this is really not ideal. this should be an event-based hat ideally, but we don't have a good
             // way to do that right now...
@@ -1087,26 +1871,26 @@
         }
 
         getVariables() {
-                // @ts-expect-error - Blockly not typed yet
-                // eslint-disable-next-line no-undef
-                const variables = typeof Blockly === 'undefined' ? [] : Blockly.getMainWorkspace()
-                    .getVariableMap()
-                    .getVariablesOfType('')
-                    .filter(model => model.isLocal)
-                    .map(model => ({
-                        text: model.name,
-                        value: model.getId()
-                    }));
-                if (variables.length > 0) {
-                    return variables;
-                } else {
-                    return [{
-                        text: "",
-                        value: ""
-                    }];
-                }
+            // @ts-expect-error - Blockly not typed yet
+            // eslint-disable-next-line no-undef
+            const variables = typeof Blockly === 'undefined' ? [] : Blockly.getMainWorkspace()
+                .getVariableMap()
+                .getVariablesOfType('')
+                .filter(model => model.isLocal)
+                .map(model => ({
+                    text: model.name,
+                    value: model.getId()
+                }));
+            if (variables.length > 0) {
+                return variables;
+            } else {
+                return [{
+                    text: "",
+                    value: ""
+                }];
             }
-            //end block
+        }
+        //end block
     }
 
     class TurboChargedOperators {
@@ -1114,587 +1898,590 @@
             return {
                 id: 'operators',
                 name: 'Operators 🪄',
-                color1: '#59C059',
-                color2: '#389438',
+                color1: getCategoryColor('operators').color1,
+                color2: getCategoryColor('operators').color2,
                 blocks: [{
-                    opcode: 'percentof',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'what is [PERCENT]% of [AMOUNT]?',
-                    disableMonitor: true,
-                    arguments: {
-                        PERCENT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '10'
-                        },
-                        AMOUNT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '50'
+                        opcode: 'percentof',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'what is [PERCENT]% of [AMOUNT]?',
+                        disableMonitor: true,
+                        arguments: {
+                            PERCENT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '10'
+                            },
+                            AMOUNT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '50'
+                            }
+                        }
+                    },
+                    /*{
+                                       opcode: 'percentin',
+                                       blockType: Scratch.BlockType.REPORTER,
+                                       text: '[AMOUNT] is what percent of [MAX]?',
+                                       disableMonitor: true,
+                                       arguments: {
+                                           PERCENT: {
+                                               type: Scratch.ArgumentType.NUMBER,
+                                               defaultValue: '10'
+                                           },
+                                           MAX: {
+                                               type: Scratch.ArgumentType.NUMBER,
+                                               defaultValue: '50'
+                                           }
+                                       }
+                                   },*/
+                    {
+                        opcode: 'percentis',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[AMOUNT] is [PERCENT]% of what?',
+                        disableMonitor: true,
+                        arguments: {
+                            PERCENT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '5'
+                            },
+                            MAX: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '10'
+                            }
+                        }
+                    }, {
+                        opcode: 'percentUD',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'what is [AMOUNT] [MODE] by [PERCENT]%?',
+                        disableMonitor: true,
+                        arguments: {
+                            AMOUNT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '45'
+                            },
+                            MODE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'percentMode'
+                            },
+                            PERCENT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '11.11'
+                            }
+                        }
+                    }, {
+                        opcode: 'clamp',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'clamp [NUM] between [MIN] and [MAX]',
+                        arguments: {
+                            NUM: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 30
+                            },
+                            MIN: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 25
+                            },
+                            MAX: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 40
+                            }
+                        }
+                    }, {
+                        opcode: 'egg',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'egg [TEXT]',
+                        arguments: {
+                            TEXT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '🥚'
+                            }
+                        }
+                    }, {
+                        opcode: 'gtEqual',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: '[OPERAND1] ≥ [OPERAND2]',
+                        arguments: {
+                            OPERAND1: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: ''
+                            },
+                            OPERAND2: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '50'
+                            }
+                        }
+                    }, {
+                        opcode: 'ltEqual',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: '[OPERAND1] ≤ [OPERAND2]',
+                        arguments: {
+                            OPERAND1: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: ''
+                            },
+                            OPERAND2: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '50'
+                            }
+                        }
+                    }, {
+                        opcode: 'nor',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: '[OPERAND1] nor [OPERAND2]',
+                        arguments: {
+                            OPERAND1: {
+                                type: Scratch.ArgumentType.BOOLEAN,
+                                defaultValue: ''
+                            },
+                            OPERAND2: {
+                                type: Scratch.ArgumentType.BOOLEAN,
+                                defaultValue: '50'
+                            }
+                        }
+                    }, {
+                        opcode: 'xor',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: '[OPERAND1] xor [OPERAND2]',
+                        arguments: {
+                            OPERAND1: {
+                                type: Scratch.ArgumentType.BOOLEAN,
+                                defaultValue: ''
+                            },
+                            OPERAND2: {
+                                type: Scratch.ArgumentType.BOOLEAN,
+                                defaultValue: '50'
+                            }
+                        }
+                    }, {
+                        opcode: 'substring',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'letters [START] to [END] of [STRING]',
+                        arguments: {
+                            START: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '1'
+                            },
+                            END: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '3'
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'apple'
+                            }
+                        }
+                    }, {
+                        opcode: 'replace',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'replace [INPUT1] with [INPUT2] in [STRING]',
+                        arguments: {
+                            INPUT1: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'Charged'
+                            },
+                            INPUT2: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'Warp'
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'TurboCharged'
+                            }
+                        }
+                    }, {
+                        opcode: 'true_block',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'true'
+                    }, {
+                        opcode: 'false_block',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: 'false'
+                    }, {
+                        opcode: 'bool_coupler',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: '[TEXT]',
+                        arguments: {
+                            TEXT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'true'
+                            }
+                        }
+                    }, {
+                        opcode: 'ifthenelse_reporter',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'if [CONDITION] then [TEXT1] else [TEXT2]',
+                        arguments: {
+                            CONDITION: {
+                                type: Scratch.ArgumentType.BOOLEAN
+                            },
+                            TEXT1: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'pass'
+                            },
+                            TEXT2: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'fail'
+                            }
+                        }
+                    }, {
+                        opcode: 'test',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'test click me',
+                        callback: 'test'
+                    }, {
+                        opcode: 'presadd',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[A] + [B]',
+                        arguments: {
+                            A: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0.2'
+                            },
+                            B: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0.1'
+                            },
+                        }
+                    }, {
+                        opcode: 'pressubtract',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[A] - [B]',
+                        arguments: {
+                            A: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0.4'
+                            },
+                            B: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0.1'
+                            },
+                        }
+                    }, {
+                        opcode: 'presmultiply',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[A] * [B]',
+                        arguments: {
+                            A: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0.3'
+                            },
+                            B: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '0.1'
+                            },
+                        }
+                    }, {
+                        opcode: 'presdivided',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: '[A] / [B] to precision of [PRE]',
+                        arguments: {
+                            A: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '10'
+                            },
+                            B: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '3'
+                            },
+                            PRE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '10'
+                            },
+                        }
+                    }, {
+                        opcode: "textplusletters_of",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "letters [LETTER1] to [LETTER2] of [STRING]",
+                        arguments: {
+                            LETTER1: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '2'
+                            },
+                            LETTER2: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '4'
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple"
+                            }
+                        }
+                    }, {
+                        opcode: "textplussplit",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "item [ITEM] of [STRING] split by [SPLIT]",
+                        arguments: {
+                            ITEM: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '3'
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple"
+                            },
+                            SPLIT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "p"
+                            }
+                        }
+                    }, {
+                        opcode: "textpluscount",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "count [SUBSTRING] in [STRING]",
+                        arguments: {
+                            SUBSTRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "p"
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusindexof",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "index of [SUBSTRING] in [STRING]",
+                        arguments: {
+                            SUBSTRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "p"
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusreplace",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "replace [SUBSTRING] in [STRING] with [REPLACE]",
+                        arguments: {
+                            SUBSTRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "world"
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "Hello world!"
+                            },
+                            REPLACE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "fellow Scratchers"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusrepeat",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "repeat [STRING] [REPEAT] times",
+                        arguments: {
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple "
+                            },
+                            REPEAT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '3'
+                            }
+                        }
+                    }, {
+                        opcode: "textplusunicodeof",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "Unicode of [STRING]",
+                        arguments: {
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "A"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusunicodefrom",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "Unicode [NUM] as letter",
+                        arguments: {
+                            NUM: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: '65'
+                            }
+                        }
+                    }, {
+                        opcode: "textplusreplaceRegex",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "replace regex /[REGEX]/[FLAGS] in [STRING] with [REPLACE]",
+                        arguments: {
+                            REGEX: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "."
+                            },
+                            FLAGS: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "g"
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "Hello world!"
+                            },
+                            REPLACE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "$&$&"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusmatchRegex",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "item [ITEM] of [STRING] matched by regex /[REGEX]/[FLAGS]",
+                        arguments: {
+                            ITEM: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 1
+                            },
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "Hello world!"
+                            },
+                            REGEX: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "(.) (.{2})"
+                            },
+                            FLAGS: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "g"
+                            }
+                        }
+                    }, {
+                        opcode: "textpluscountRegex",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "count regex /[REGEX]/[FLAGS] in [STRING]",
+                        arguments: {
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "Hello world!"
+                            },
+                            REGEX: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "[AEIOU]"
+                            },
+                            FLAGS: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "i"
+                            }
+                        }
+                    }, {
+                        opcode: "textplustestRegex",
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: "[STRING] matches regex /[REGEX]/[FLAGS]?",
+                        arguments: {
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "Hello world!"
+                            },
+                            REGEX: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "hello"
+                            },
+                            FLAGS: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "i"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusidentical",
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: "is [OPERAND1] identical to [OPERAND2]?",
+                        arguments: {
+                            OPERAND1: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "A"
+                            },
+                            OPERAND2: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "a"
+                            }
+                        }
+                    }, {
+                        opcode: "textplusisCase",
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: "is [STRING] [TEXTCASE]?",
+                        arguments: {
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple"
+                            },
+                            TEXTCASE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "textCase",
+                                defaultValue: window.extensionData.textPlus.CaseParam.LOWERCASE
+                            }
+                        }
+                    }, {
+                        opcode: "textplustoCase",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "convert [STRING] to [TEXTCASE]",
+                        arguments: {
+                            STRING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "apple"
+                            },
+                            TEXTCASE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: "textCase",
+                                defaultValue: window.extensionData.textPlus.CaseParam.UPPERCASE
+                            }
+                        }
+                    }, {
+                        opcode: 'casttoType',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'cast [INPUT] to [TYPE]',
+                        allowDropAnywhere: true,
+                        disableMonitor: true,
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'apple'
+                            },
+                            TYPE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'castType'
+                            }
+                        }
+                    }, {
+                        opcode: 'casttypeOf',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'type of [INPUT]',
+                        disableMonitor: true,
+                        arguments: {
+                            INPUT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: 'apple'
+                            }
+                        }
+                    }, {
+                        opcode: 'tweenValue',
+                        text: '[MODE] ease [DIRECTION] [START] to [END] by [AMOUNT]%',
+                        disableMonitor: true,
+                        blockType: Scratch.BlockType.REPORTER,
+                        arguments: {
+                            MODE: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'tweenmodes'
+                            },
+                            DIRECTION: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'tweendirection'
+                            },
+                            START: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 0
+                            },
+                            END: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 100
+                            },
+                            AMOUNT: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 50
+                            },
                         }
                     }
-                }, /*{
-                    opcode: 'percentin',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: '[AMOUNT] is what percent of [MAX]?',
-                    disableMonitor: true,
-                    arguments: {
-                        PERCENT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '10'
-                        },
-                        MAX: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '50'
-                        }
-                    }
-                },*/ {
-                    opcode: 'percentis',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: '[AMOUNT] is [PERCENT]% of what?',
-                    disableMonitor: true,
-                    arguments: {
-                        PERCENT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '5'
-                        },
-                        MAX: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '10'
-                        }
-                    }
-                }, {
-                    opcode: 'percentUD',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'what is [AMOUNT] [MODE] by [PERCENT]%?',
-                    disableMonitor: true,
-                    arguments: {
-                        AMOUNT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '45'
-                        },
-                        MODE: {
-                            type: Scratch.ArgumentType.STRING,
-                            menu: 'percentMode'
-                        },
-                        PERCENT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '11.11'
-                        }
-                    }
-                }, {
-                    opcode: 'clamp',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'clamp [NUM] between [MIN] and [MAX]',
-                    arguments: {
-                        NUM: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 30
-                        },
-                        MIN: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 25
-                        },
-                        MAX: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 40
-                        }
-                    }
-                }, {
-                    opcode: 'egg',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'egg [TEXT]',
-                    arguments: {
-                        TEXT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '🥚'
-                        }
-                    }
-                }, {
-                    opcode: 'gtEqual',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[OPERAND1] ≥ [OPERAND2]',
-                    arguments: {
-                        OPERAND1: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: ''
-                        },
-                        OPERAND2: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '50'
-                        }
-                    }
-                }, {
-                    opcode: 'ltEqual',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[OPERAND1] ≤ [OPERAND2]',
-                    arguments: {
-                        OPERAND1: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: ''
-                        },
-                        OPERAND2: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '50'
-                        }
-                    }
-                }, {
-                    opcode: 'nor',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[OPERAND1] nor [OPERAND2]',
-                    arguments: {
-                        OPERAND1: {
-                            type: Scratch.ArgumentType.BOOLEAN,
-                            defaultValue: ''
-                        },
-                        OPERAND2: {
-                            type: Scratch.ArgumentType.BOOLEAN,
-                            defaultValue: '50'
-                        }
-                    }
-                }, {
-                    opcode: 'xor',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[OPERAND1] xor [OPERAND2]',
-                    arguments: {
-                        OPERAND1: {
-                            type: Scratch.ArgumentType.BOOLEAN,
-                            defaultValue: ''
-                        },
-                        OPERAND2: {
-                            type: Scratch.ArgumentType.BOOLEAN,
-                            defaultValue: '50'
-                        }
-                    }
-                }, {
-                    opcode: 'substring',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'letters [START] to [END] of [STRING]',
-                    arguments: {
-                        START: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '1'
-                        },
-                        END: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '3'
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'apple'
-                        }
-                    }
-                }, {
-                    opcode: 'replace',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'replace [INPUT1] with [INPUT2] in [STRING]',
-                    arguments: {
-                        INPUT1: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'Charged'
-                        },
-                        INPUT2: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'Warp'
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'TurboCharged'
-                        }
-                    }
-                }, {
-                    opcode: 'true_block',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: 'true'
-                }, {
-                    opcode: 'false_block',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: 'false'
-                }, {
-                    opcode: 'bool_coupler',
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[TEXT]',
-                    arguments: {
-                        TEXT: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'true'
-                        }
-                    }
-                }, {
-                    opcode: 'ifthenelse_reporter',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'if [CONDITION] then [TEXT1] else [TEXT2]',
-                    arguments: {
-                        CONDITION: {
-                            type: Scratch.ArgumentType.BOOLEAN
-                        },
-                        TEXT1: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'pass'
-                        },
-                        TEXT2: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'fail'
-                        }
-                    }
-                }, {
-                    opcode: 'test',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'test click me',
-                    callback: 'test'
-                }, {
-                    opcode: 'presadd',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: '[A] + [B]',
-                    arguments: {
-                        A: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '0.2'
-                        },
-                        B: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '0.1'
-                        },
-                    }
-                }, {
-                    opcode: 'pressubtract',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: '[A] - [B]',
-                    arguments: {
-                        A: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '0.4'
-                        },
-                        B: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '0.1'
-                        },
-                    }
-                }, {
-                    opcode: 'presmultiply',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: '[A] * [B]',
-                    arguments: {
-                        A: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '0.3'
-                        },
-                        B: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '0.1'
-                        },
-                    }
-                }, {
-                    opcode: 'presdivided',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: '[A] / [B] to precision of [PRE]',
-                    arguments: {
-                        A: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '10'
-                        },
-                        B: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '3'
-                        },
-                        PRE: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: '10'
-                        },
-                    }
-                }, {
-                    opcode: "textplusletters_of",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "letters [LETTER1] to [LETTER2] of [STRING]",
-                    arguments: {
-                        LETTER1: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '2'
-                        },
-                        LETTER2: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '4'
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple"
-                        }
-                    }
-                }, {
-                    opcode: "textplussplit",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "item [ITEM] of [STRING] split by [SPLIT]",
-                    arguments: {
-                        ITEM: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '3'
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple"
-                        },
-                        SPLIT: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "p"
-                        }
-                    }
-                }, {
-                    opcode: "textpluscount",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "count [SUBSTRING] in [STRING]",
-                    arguments: {
-                        SUBSTRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "p"
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple"
-                        }
-                    }
-                }, {
-                    opcode: "textplusindexof",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "index of [SUBSTRING] in [STRING]",
-                    arguments: {
-                        SUBSTRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "p"
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple"
-                        }
-                    }
-                }, {
-                    opcode: "textplusreplace",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "replace [SUBSTRING] in [STRING] with [REPLACE]",
-                    arguments: {
-                        SUBSTRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "world"
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "Hello world!"
-                        },
-                        REPLACE: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "fellow Scratchers"
-                        }
-                    }
-                }, {
-                    opcode: "textplusrepeat",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "repeat [STRING] [REPEAT] times",
-                    arguments: {
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple "
-                        },
-                        REPEAT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '3'
-                        }
-                    }
-                }, {
-                    opcode: "textplusunicodeof",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "Unicode of [STRING]",
-                    arguments: {
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "A"
-                        }
-                    }
-                }, {
-                    opcode: "textplusunicodefrom",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "Unicode [NUM] as letter",
-                    arguments: {
-                        NUM: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: '65'
-                        }
-                    }
-                }, {
-                    opcode: "textplusreplaceRegex",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "replace regex /[REGEX]/[FLAGS] in [STRING] with [REPLACE]",
-                    arguments: {
-                        REGEX: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "."
-                        },
-                        FLAGS: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "g"
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "Hello world!"
-                        },
-                        REPLACE: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "$&$&"
-                        }
-                    }
-                }, {
-                    opcode: "textplusmatchRegex",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "item [ITEM] of [STRING] matched by regex /[REGEX]/[FLAGS]",
-                    arguments: {
-                        ITEM: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 1
-                        },
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "Hello world!"
-                        },
-                        REGEX: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "(.) (.{2})"
-                        },
-                        FLAGS: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "g"
-                        }
-                    }
-                }, {
-                    opcode: "textpluscountRegex",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "count regex /[REGEX]/[FLAGS] in [STRING]",
-                    arguments: {
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "Hello world!"
-                        },
-                        REGEX: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "[AEIOU]"
-                        },
-                        FLAGS: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "i"
-                        }
-                    }
-                }, {
-                    opcode: "textplustestRegex",
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: "[STRING] matches regex /[REGEX]/[FLAGS]?",
-                    arguments: {
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "Hello world!"
-                        },
-                        REGEX: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "hello"
-                        },
-                        FLAGS: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "i"
-                        }
-                    }
-                }, {
-                    opcode: "textplusidentical",
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: "is [OPERAND1] identical to [OPERAND2]?",
-                    arguments: {
-                        OPERAND1: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "A"
-                        },
-                        OPERAND2: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "a"
-                        }
-                    }
-                }, {
-                    opcode: "textplusisCase",
-                    blockType: Scratch.BlockType.BOOLEAN,
-                    text: "is [STRING] [TEXTCASE]?",
-                    arguments: {
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple"
-                        },
-                        TEXTCASE: {
-                            type: Scratch.ArgumentType.STRING,
-                            menu: "textCase",
-                            defaultValue: window.extensionData.textPlus.CaseParam.LOWERCASE
-                        }
-                    }
-                }, {
-                    opcode: "textplustoCase",
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: "convert [STRING] to [TEXTCASE]",
-                    arguments: {
-                        STRING: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: "apple"
-                        },
-                        TEXTCASE: {
-                            type: Scratch.ArgumentType.STRING,
-                            menu: "textCase",
-                            defaultValue: window.extensionData.textPlus.CaseParam.UPPERCASE
-                        }
-                    }
-                }, {
-                    opcode: 'casttoType',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'cast [INPUT] to [TYPE]',
-                    allowDropAnywhere: true,
-                    disableMonitor: true,
-                    arguments: {
-                        INPUT: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'apple'
-                        },
-                        TYPE: {
-                            type: Scratch.ArgumentType.STRING,
-                            menu: 'castType'
-                        }
-                    }
-                }, {
-                    opcode: 'casttypeOf',
-                    blockType: Scratch.BlockType.REPORTER,
-                    text: 'type of [INPUT]',
-                    disableMonitor: true,
-                    arguments: {
-                        INPUT: {
-                            type: Scratch.ArgumentType.STRING,
-                            defaultValue: 'apple'
-                        }
-                    }
-                }, {
-                    opcode: 'tweenValue',
-                    text: '[MODE] ease [DIRECTION] [START] to [END] by [AMOUNT]%',
-                    disableMonitor: true,
-                    blockType: Scratch.BlockType.REPORTER,
-                    arguments: {
-                        MODE: {
-                            type: Scratch.ArgumentType.STRING,
-                            menu: 'tweenmodes'
-                        },
-                        DIRECTION: {
-                            type: Scratch.ArgumentType.STRING,
-                            menu: 'tweendirection'
-                        },
-                        START: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 0
-                        },
-                        END: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 100
-                        },
-                        AMOUNT: {
-                            type: Scratch.ArgumentType.NUMBER,
-                            defaultValue: 50
-                        },
-                    }
-                }],
+                ],
                 menus: {
                     percentMode: {
                         acceptReporters: true,
@@ -1705,7 +2492,7 @@
                             text: "decreased",
                             value: "decreased"
                         }]
-                    }, 
+                    },
                     textCase: {
                         acceptReporters: true,
                         items: [{
@@ -1807,24 +2594,25 @@
             return Scratch.Cast.toBoolean(TEXT);
         }
         test() {
-                alert(1);
-            }
+            alert(1);
+        }
         percentof(args) {
-            return (Scratch.Cast.toNumber(args.AMOUNT)*Scratch.Cast.toNumber(args.PERCENT))/100;
+            return (Scratch.Cast.toNumber(args.AMOUNT) * Scratch.Cast.toNumber(args.PERCENT)) / 100;
         }
         percentis(args) {
-            return (Scratch.Cast.toNumber(args.AMOUNT)*100)/Scratch.Cast.toNumber(args.PERCENT);
+            return (Scratch.Cast.toNumber(args.AMOUNT) * 100) / Scratch.Cast.toNumber(args.PERCENT);
         }
         percentin(args) {
-            return (Scratch.Cast.toNumber(args.AMOUNT)*100)/Scratch.Cast.toNumber(args.PERCENT);
+            return (Scratch.Cast.toNumber(args.AMOUNT) * 100) / Scratch.Cast.toNumber(args.PERCENT);
         }
         percentUD(args) {
             args.AMOUNT = Scratch.Cast.toNumber(args.AMOUNT);
             args.PERCENT = Scratch.Cast.toNumber(args.PERCENT);
-            var x=args.AMOUNT,p=args.PERCENT;
+            var x = args.AMOUNT,
+                p = args.PERCENT;
             var y1 = x * ((100 + p) / 100);
             var y2 = x * ((100 - p) / 100);
-            switch(args.MODE) {
+            switch (args.MODE) {
                 case 'increased':
                     return y1;
                 case 'decreased':
@@ -1907,21 +2695,21 @@
             return result;
         }
         presdivided(args) {
-                var dividend = Scratch.Cast.toString(args.A),
-                    divisor = Scratch.Cast.toString(args.B);
-                var precision = Scratch.Cast.toNumber(args.PRE);
-                const dividendNum = parseFloat(dividend);
-                const divisorNum = parseFloat(divisor);
-                if (divisorNum === 0) return 'divisor can\'t is zero';
-                const resultNum = dividendNum / divisorNum;
-                let result = resultNum.toFixed(precision).toString();
-                var last = '.' + '0'.repeat(precision);
-                result = result.replace(/(\.[0-9]*[1-9])0+$/, '$1');
-                if (result.endsWith(last)) return result.split(last)[0];
-                return result;
-            }
-            //end block
-            //text+ extension
+            var dividend = Scratch.Cast.toString(args.A),
+                divisor = Scratch.Cast.toString(args.B);
+            var precision = Scratch.Cast.toNumber(args.PRE);
+            const dividendNum = parseFloat(dividend);
+            const divisorNum = parseFloat(divisor);
+            if (divisorNum === 0) return 'divisor can\'t is zero';
+            const resultNum = dividendNum / divisorNum;
+            let result = resultNum.toFixed(precision).toString();
+            var last = '.' + '0'.repeat(precision);
+            result = result.replace(/(\.[0-9]*[1-9])0+$/, '$1');
+            if (result.endsWith(last)) return result.split(last)[0];
+            return result;
+        }
+        //end block
+        //text+ extension
         textplusidentical(args, util) {
             // Purposefully no casting, because
             // types ARE differentiated in this block
@@ -2086,35 +2874,35 @@
             }
         }
         textplustoCase(args, util) {
-                const string = args.STRING.toString();
-                const textCase = args.TEXTCASE.toString();
-                switch (textCase) {
-                    case window.extensionData.textPlus.CaseParam.LOWERCASE:
-                        return string.toLowerCase();
-                    case window.extensionData.textPlus.CaseParam.UPPERCASE:
-                        return string.toUpperCase();
-                    case window.extensionData.textPlus.CaseParam.MIXEDCASE:
-                        return Array.from(string).map(
-                            (char, index) => index % 2 === 0 ?
-                            char.toUpperCase() :
-                            char.toLowerCase()
-                        ).join("");
-                    case window.extensionData.textPlus.CaseParam.TITLECASE:
-                        return string.split(/\b/g).map((word) => {
-                            if (!word) return '';
-                            return word[0].toUpperCase() + word.substring(1);
-                        }).join("");
-                    case window.extensionData.textPlus.CaseParam.EXACTTITLECASE:
-                        return string.split(/\b/g).map((word) => {
-                            if (!word) return '';
-                            return word[0].toUpperCase() + word.substring(1).toLowerCase();
-                        }).join("");
-                    default:
-                        return string;
-                }
+            const string = args.STRING.toString();
+            const textCase = args.TEXTCASE.toString();
+            switch (textCase) {
+                case window.extensionData.textPlus.CaseParam.LOWERCASE:
+                    return string.toLowerCase();
+                case window.extensionData.textPlus.CaseParam.UPPERCASE:
+                    return string.toUpperCase();
+                case window.extensionData.textPlus.CaseParam.MIXEDCASE:
+                    return Array.from(string).map(
+                        (char, index) => index % 2 === 0 ?
+                        char.toUpperCase() :
+                        char.toLowerCase()
+                    ).join("");
+                case window.extensionData.textPlus.CaseParam.TITLECASE:
+                    return string.split(/\b/g).map((word) => {
+                        if (!word) return '';
+                        return word[0].toUpperCase() + word.substring(1);
+                    }).join("");
+                case window.extensionData.textPlus.CaseParam.EXACTTITLECASE:
+                    return string.split(/\b/g).map((word) => {
+                        if (!word) return '';
+                        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+                    }).join("");
+                default:
+                    return string;
             }
-            //end block
-            //cast extension
+        }
+        //end block
+        //cast extension
         casttoType(args) {
             const input = args.INPUT;
             switch (args.TYPE) {
@@ -2129,266 +2917,236 @@
             }
         }
         casttypeOf(args) {
-                const input = args.INPUT;
-                switch (typeof input) {
-                    case ('number'):
-                        return 'number';
-                    case ('string'):
-                        return 'string';
-                    case ('boolean'):
-                        return 'boolean';
-                    default:
-                        return '';
-                }
+            const input = args.INPUT;
+            switch (typeof input) {
+                case ('number'):
+                    return 'number';
+                case ('string'):
+                    return 'string';
+                case ('boolean'):
+                    return 'boolean';
+                default:
+                    return '';
             }
-            //end block
-            //tween extension
-            // utilities
+        }
+        //end block
+        //tween extension
+        // utilities
         multiplierToNormalNumber(mul, start, end) {
-                const multiplier = end - start;
-                const result = (mul * multiplier) + start;
-                return result;
-            }
-            // blocks
+            const multiplier = end - start;
+            const result = (mul * multiplier) + start;
+            return result;
+        }
+        // blocks
         tweenValue(args) {
-                const easeMethod = Scratch.Cast.toString(args.MODE);
-                const easeDirection = Scratch.Cast.toString(args.DIRECTION);
-                const start = Scratch.Cast.toNumber(args.START);
-                const end = Scratch.Cast.toNumber(args.END);
-                // easing method does not exist, return starting number
-                const EasingMethods = [
-                    "linear", "sine", "quad", "cubic", "quart", "quint", "expo", "circ", "back", "elastic", "bounce"
-                ];
-                if (!EasingMethods.includes(easeMethod)) return start;
-                // easing method is not implemented, return starting number
-                if (!this[easeMethod]) return start;
-                const progress = Scratch.Cast.toNumber(args.AMOUNT) / 100;
-                const tweened = this[easeMethod](progress, easeDirection);
-                return this.multiplierToNormalNumber(tweened, start, end);
-            }
-            // easing functions (placed below blocks for organization)
+            const easeMethod = Scratch.Cast.toString(args.MODE);
+            const easeDirection = Scratch.Cast.toString(args.DIRECTION);
+            const start = Scratch.Cast.toNumber(args.START);
+            const end = Scratch.Cast.toNumber(args.END);
+            // easing method does not exist, return starting number
+            const EasingMethods = [
+                "linear", "sine", "quad", "cubic", "quart", "quint", "expo", "circ", "back", "elastic", "bounce"
+            ];
+            if (!EasingMethods.includes(easeMethod)) return start;
+            // easing method is not implemented, return starting number
+            if (!this[easeMethod]) return start;
+            const progress = Scratch.Cast.toNumber(args.AMOUNT) / 100;
+            const tweened = this[easeMethod](progress, easeDirection);
+            return this.multiplierToNormalNumber(tweened, start, end);
+        }
+        // easing functions (placed below blocks for organization)
         linear(x) {
             // lol
             return x;
         }
         sine(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return 1 - Math.cos((x * Math.PI) / 2);
-                    }
-                case "out":
-                    {
-                        return Math.sin((x * Math.PI) / 2);
-                    }
-                case "in out":
-                    {
-                        return -(Math.cos(Math.PI * x) - 1) / 2;
-                    }
+                case "in": {
+                    return 1 - Math.cos((x * Math.PI) / 2);
+                }
+                case "out": {
+                    return Math.sin((x * Math.PI) / 2);
+                }
+                case "in out": {
+                    return -(Math.cos(Math.PI * x) - 1) / 2;
+                }
                 default:
                     return 0;
             }
         }
         quad(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return x * x;
-                    }
-                case "out":
-                    {
-                        return 1 - (1 - x) * (1 - x);
-                    }
-                case "in out":
-                    {
-                        return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
-                    }
+                case "in": {
+                    return x * x;
+                }
+                case "out": {
+                    return 1 - (1 - x) * (1 - x);
+                }
+                case "in out": {
+                    return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+                }
                 default:
                     return 0;
             }
         }
         cubic(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return x * x * x;
-                    }
-                case "out":
-                    {
-                        return 1 - Math.pow(1 - x, 3);
-                    }
-                case "in out":
-                    {
-                        return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-                    }
+                case "in": {
+                    return x * x * x;
+                }
+                case "out": {
+                    return 1 - Math.pow(1 - x, 3);
+                }
+                case "in out": {
+                    return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+                }
                 default:
                     return 0;
             }
         }
         quart(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return x * x * x * x;
-                    }
-                case "out":
-                    {
-                        return 1 - Math.pow(1 - x, 4);
-                    }
-                case "in out":
-                    {
-                        return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
-                    }
+                case "in": {
+                    return x * x * x * x;
+                }
+                case "out": {
+                    return 1 - Math.pow(1 - x, 4);
+                }
+                case "in out": {
+                    return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
+                }
                 default:
                     return 0;
             }
         }
         quint(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return x * x * x * x * x;
-                    }
-                case "out":
-                    {
-                        return 1 - Math.pow(1 - x, 5);
-                    }
-                case "in out":
-                    {
-                        return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
-                    }
+                case "in": {
+                    return x * x * x * x * x;
+                }
+                case "out": {
+                    return 1 - Math.pow(1 - x, 5);
+                }
+                case "in out": {
+                    return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
+                }
                 default:
                     return 0;
             }
         }
         expo(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return x === 0 ? 0 : Math.pow(2, 10 * x - 10);
-                    }
-                case "out":
-                    {
-                        return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
-                    }
-                case "in out":
-                    {
-                        return x === 0 ?
-                            0 : x === 1 ?
-                            1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 :
-                            (2 - Math.pow(2, -20 * x + 10)) / 2;
-                    }
+                case "in": {
+                    return x === 0 ? 0 : Math.pow(2, 10 * x - 10);
+                }
+                case "out": {
+                    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+                }
+                case "in out": {
+                    return x === 0 ?
+                        0 : x === 1 ?
+                        1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 :
+                        (2 - Math.pow(2, -20 * x + 10)) / 2;
+                }
                 default:
                     return 0;
             }
         }
         circ(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        return 1 - Math.sqrt(1 - Math.pow(x, 2));
-                    }
-                case "out":
-                    {
-                        return Math.sqrt(1 - Math.pow(x - 1, 2));
-                    }
-                case "in out":
-                    {
-                        return x < 0.5 ?
-                            (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2 :
-                            (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
-                    }
+                case "in": {
+                    return 1 - Math.sqrt(1 - Math.pow(x, 2));
+                }
+                case "out": {
+                    return Math.sqrt(1 - Math.pow(x - 1, 2));
+                }
+                case "in out": {
+                    return x < 0.5 ?
+                        (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2 :
+                        (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
+                }
                 default:
                     return 0;
             }
         }
         back(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        const c1 = 1.70158;
-                        const c3 = c1 + 1;
-                        return c3 * x * x * x - c1 * x * x;
-                    }
-                case "out":
-                    {
-                        const c1 = 1.70158;
-                        const c3 = c1 + 1;
-                        return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
-                    }
-                case "in out":
-                    {
-                        const c1 = 1.70158;
-                        const c2 = c1 * 1.525;
-                        return x < 0.5 ?
-                            (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 :
-                            (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
-                    }
+                case "in": {
+                    const c1 = 1.70158;
+                    const c3 = c1 + 1;
+                    return c3 * x * x * x - c1 * x * x;
+                }
+                case "out": {
+                    const c1 = 1.70158;
+                    const c3 = c1 + 1;
+                    return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+                }
+                case "in out": {
+                    const c1 = 1.70158;
+                    const c2 = c1 * 1.525;
+                    return x < 0.5 ?
+                        (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 :
+                        (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+                }
                 default:
                     return 0;
             }
         }
         elastic(x, dir) {
             switch (dir) {
-                case "in":
-                    {
-                        const c4 = (2 * Math.PI) / 3;
-                        return x === 0 ?
-                            0 : x === 1 ?
-                            1 :
-                            -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4);
-                    }
-                case "out":
-                    {
-                        const c4 = (2 * Math.PI) / 3;
-                        return x === 0 ?
-                            0 : x === 1 ?
-                            1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
-                    }
-                case "in out":
-                    {
-                        const c5 = (2 * Math.PI) / 4.5;
-                        return x === 0 ?
-                            0 : x === 1 ?
-                            1 : x < 0.5 ?
-                            -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * c5)) / 2 :
-                            (Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * c5)) / 2 + 1;
-                    }
+                case "in": {
+                    const c4 = (2 * Math.PI) / 3;
+                    return x === 0 ?
+                        0 : x === 1 ?
+                        1 :
+                        -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4);
+                }
+                case "out": {
+                    const c4 = (2 * Math.PI) / 3;
+                    return x === 0 ?
+                        0 : x === 1 ?
+                        1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
+                }
+                case "in out": {
+                    const c5 = (2 * Math.PI) / 4.5;
+                    return x === 0 ?
+                        0 : x === 1 ?
+                        1 : x < 0.5 ?
+                        -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * c5)) / 2 :
+                        (Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * c5)) / 2 + 1;
+                }
                 default:
                     return 0;
             }
         }
         bounce(x, dir) {
-                switch (dir) {
-                    case "in":
-                        {
-                            return 1 - this.bounce(1 - x, "out");
-                        }
-                    case "out":
-                        {
-                            const n1 = 7.5625;
-                            const d1 = 2.75;
-                            if (x < 1 / d1) {
-                                return n1 * x * x;
-                            } else if (x < 2 / d1) {
-                                return n1 * (x -= 1.5 / d1) * x + 0.75;
-                            } else if (x < 2.5 / d1) {
-                                return n1 * (x -= 2.25 / d1) * x + 0.9375;
-                            } else {
-                                return n1 * (x -= 2.625 / d1) * x + 0.984375;
-                            }
-                        }
-                    case "in out":
-                        {
-                            return x < 0.5 ?
-                                (1 - this.bounce(1 - 2 * x, "out")) / 2 :
-                                (1 + this.bounce(2 * x - 1, "out")) / 2;
-                        }
-                    default:
-                        return 0;
+            switch (dir) {
+                case "in": {
+                    return 1 - this.bounce(1 - x, "out");
                 }
+                case "out": {
+                    const n1 = 7.5625;
+                    const d1 = 2.75;
+                    if (x < 1 / d1) {
+                        return n1 * x * x;
+                    } else if (x < 2 / d1) {
+                        return n1 * (x -= 1.5 / d1) * x + 0.75;
+                    } else if (x < 2.5 / d1) {
+                        return n1 * (x -= 2.25 / d1) * x + 0.9375;
+                    } else {
+                        return n1 * (x -= 2.625 / d1) * x + 0.984375;
+                    }
+                }
+                case "in out": {
+                    return x < 0.5 ?
+                        (1 - this.bounce(1 - 2 * x, "out")) / 2 :
+                        (1 + this.bounce(2 * x - 1, "out")) / 2;
+                }
+                default:
+                    return 0;
             }
-            //end block
+        }
+        //end block
     }
 
     const credits = function(isInitialSetup, isStage, targetId) {
@@ -2396,21 +3154,21 @@
     <category name="Credits 🪄" id="credits" colour="#ffb6c1" secondaryColour="#ffc0cb"> //oooooo :D
     <button text="Credits" callbackKey="EXTENSION_CALLBACK" callbackData="motion_credit"></button>
     <block type="motion_credit_version">
-        <mutation blockInfo='{"blockType":"reporter","terminal":false,"blockAllThreads":false,"arguments":{},"opcode":"credit_version","text":"TurboCharged Version","isDynamic":true,"color1":"#ffb6c1","isTerminal":false,"disableMonitor":true}'/> // this was extremely annoying but worth it.
+    <mutation blockInfo='{"blockType":"reporter","terminal":false,"blockAllThreads":false,"arguments":{},"opcode":"credit_version","text":"TurboCharged Version","isDynamic":true,"color1":"#ffb6c1","isTerminal":false,"disableMonitor":true}'/> // this was extremely annoying but worth it.
     </block>
     ${categorySeparator}
     </category>`;
     }
 
     const motion = function(isInitialSetup, isStage, targetId) {
-            const stageSelected = ScratchBlocks.ScratchMsgs.translate(
-                'MOTION_STAGE_SELECTED', 'Stage Selected: No Motion Blocks'
-            );
-            return `
+        const stageSelected = ScratchBlocks.ScratchMsgs.translate(
+            'MOTION_STAGE_SELECTED', 'Stage Selected: No Motion Blocks'
+        );
+        return `
     ${credits(isInitialSetup, isStage, targetId)}
-    <category name="Motion 🪄" id="motion" colour="#4C97FF" secondaryColour="#3373CC">
+    <category name="%{BKY_CATEGORY_MOTION} 🪄" id="motion" colour="${getCategoryColor('motion').color1}" secondaryColour="${getCategoryColor('motion').color2}">
     ${isStage ? `
-    <label text="Stage Selected: No Motion Blocks"></label>
+    <label text="${stageSelected}"></label>
     ` : `
     <block type="motion_movesteps">
         <value name="STEPS">
@@ -2650,11 +3408,11 @@ ${blockSeparator}
 ${categorySeparator}
 </category>
 `;
-}
+    }
 
-const operators = function (isInitialSetup) {
-    return `
-    <category name="Operators 🪄" id="operators" colour="#59C059" secondaryColour="#389438">
+    const operators = function(isInitialSetup) {
+        return `
+    <category name="%{BKY_CATEGORY_OPERATORS} 🪄" id="operators" colour="${getCategoryColor('operators').color1}" secondaryColour="${getCategoryColor('operators').color2}">
     <block type="operator_add">
         <value name="NUM1">
             <shadow type="math_number">
@@ -3291,13 +4049,13 @@ const operators = function (isInitialSetup) {
     ${categorySeparator}
 </category>
 `;
-}
+    }
 
-const looks = function (isInitialSetup, isStage, targetId, costumeName, backdropName) {
-    const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
-    const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
-    return `
-<category name="Looks 🪄" id="looks" colour="#9966FF" secondaryColour="#774DCB">
+    const looks = function(isInitialSetup, isStage, targetId, costumeName, backdropName) {
+        const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
+        const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
+        return `
+<category name="%{BKY_CATEGORY_LOOKS} 🪄" id="looks" colour="${getCategoryColor('looks').color1}" secondaryColour="${getCategoryColor('looks').color2}">
     ${isStage ? '' : `
     <block type="looks_sayforsecs">
         <value name="MESSAGE">
@@ -3428,10 +4186,10 @@ const looks = function (isInitialSetup, isStage, targetId, costumeName, backdrop
     ${categorySeparator}
 </category>
 `;
-};
-const sound = function (isInitialSetup, isStage, targetId, soundName) {
-    return `
-<category name="Sound 🪄" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
+    };
+    const sound = function(isInitialSetup, isStage, targetId, soundName) {
+        return `
+<category name="%{BKY_CATEGORY_SOUND} 🪄" id="sound" colour="${getCategoryColor('sound').color1}" secondaryColour="${getCategoryColor('looks').color2}">
     <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
         <value name="SOUND_MENU">
             <shadow type="sound_sounds_menu">
@@ -3482,50 +4240,138 @@ const sound = function (isInitialSetup, isStage, targetId, soundName) {
     ${categorySeparator}
 </category>
 `;
-};
+    };
 
-const events = function (isInitialSetup, isStage) {
-    return `
-    //Bruh so annoying having to do this "get category color" shit just to fix the color issue.
-<category name="Events 🪄" id="event" colour="${getCategoryColor('events').color1}" secondaryColour="${getCategoryColor('events').color2}">
-    <block type="event_whenflagclicked"/>
-    <block type="event_whenkeypressed">
-    </block>
-    ${isStage ? `
+    const events = function(isInitialSetup, isStage) {
+        return `
+        <category name="%{BKY_CATEGORY_EVENTS} 🪄" id="${eventsID}" colour="${getCategoryColor('events').color1}" secondaryColour="${getCategoryColor('events').color2}">
+        <block type="event_whenflagclicked"/>
+        <block type="${eventsID}_MoreEventswhenStopClicked"></block>
+        <block type="${eventsID}_MoreEventsforever"></block>
+                ${blockSeparator}
+                
+        <block type="event_whenkeypressed"></block>
+        <block type="${eventsID}_MoreEventswhenKeyAction">
+            <value name="KEY_OPTION">
+                <shadow type="${eventsID}_menu_keyboardButtons">
+                    <field name="keyboardButtons">space</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="${eventsID}_MoreEventswhileKeyPressed">
+            <value name="KEY_OPTION">
+                <shadow type="${eventsID}_menu_keyboardButtons">
+                    <field name="keyboardButtons">space</field>
+                </shadow>
+            </value>
+        </block>
+                ${blockSeparator}
+                
+        <block type="${eventsID}_MoreEventswhenTrueFalse">
+            <value name="CONDITION"></value>
+        </block>
+        <block type="${eventsID}_MoreEventswhileTrueFalse">
+            <value name="CONDITION"></value>
+        </block>
+        <block type="${eventsID}_MoreEventswhenValueChanged">
+            <value name="INPUT"></value>
+        </block>
+                ${isStage ? `
+                    
         <block type="event_whenstageclicked"/>
-    ` : `
+                ` : `
+                    
         <block type="event_whenthisspriteclicked"/>
-    `}
-    <block type="event_whenbackdropswitchesto">
-    </block>
-    ${blockSeparator}
-    <block type="event_whengreaterthan">
-        <value name="VALUE">
-            <shadow type="math_number">
-                <field name="NUM">10</field>
-            </shadow>
-        </value>
-    </block>
-    ${blockSeparator}
-    <block type="event_whenbroadcastreceived">
-    </block>
-    <block type="event_broadcast">
-        <value name="BROADCAST_INPUT">
-            <shadow type="event_broadcast_menu"></shadow>
-        </value>
-    </block>
-    <block type="event_broadcastandwait">
-        <value name="BROADCAST_INPUT">
-            <shadow type="event_broadcast_menu"></shadow>
-        </value>
-    </block>
-    ${categorySeparator}
-</category>
-`;
-};
-const control = function (isInitialSetup, isStage) {
-    return `
-<category name="Control 🪄" id="control" colour="#FFAB19" secondaryColour="#CF8B17">
+                `}
+                
+        <block type="event_whenbackdropswitchesto"></block>
+                ${blockSeparator}
+                
+        <block type="event_whengreaterthan">
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+                ${blockSeparator}
+                
+        <block type="event_whenbroadcastreceived"></block>
+        <block type="event_broadcast">
+            <value name="BROADCAST_INPUT">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+        </block>
+        <block type="event_broadcastandwait">
+            <value name="BROADCAST_INPUT">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+        </block>
+        <block type="${eventsID}_MoreEvents_broadcastToTarget">
+            <value name="BROADCAST_OPTION">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+            <value name="TARGET">
+                <shadow type="${eventsID}_menu_targetMenu"></shadow>
+            </value>
+        </block>
+        <block type="${eventsID}_MoreEvents_broadcastToTargetAndWait">
+            <value name="BROADCAST_OPTION">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+            <value name="TARGET">
+                <shadow type="${eventsID}_menu_targetMenu"></shadow>
+            </value>
+        </block>
+        ${blockSeparator}
+        <block type="${eventsID}_MoreEvents_broadcastData">
+            <value name="BROADCAST_OPTION">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+            <value name="DATA">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <block type="${eventsID}_MoreEvents_broadcastDataAndWait">
+            <value name="BROADCAST_OPTION">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+            <value name="DATA">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <block type="${eventsID}_MoreEventsreceivedData"></block>
+        ${blockSeparator}
+        <block type="${eventsID}_MoreEvents_broadcastDataToTarget">
+            <value name="BROADCAST_OPTION">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+            <value name="TARGET">
+                <shadow type="${eventsID}_menu_targetMenu"></shadow>
+            </value>
+            <value name="DATA">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <block type="${eventsID}_MoreEvents_broadcastDataToTargetAndWait">
+            <value name="BROADCAST_OPTION">
+                <shadow type="event_broadcast_menu"></shadow>
+            </value>
+            <value name="TARGET">
+                <shadow type="${eventsID}_menu_targetMenu"></shadow>
+            </value>
+            <value name="DATA">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+                ${categorySeparator}
+            
+    </category>
+        `;
+    };
+    const control = function(isInitialSetup, isStage) {
+        return `
+<category name="%{BKY_CATEGORY_CONTROL} 🪄" id="control" colour="${getCategoryColor('control').color1}" secondaryColour="${getCategoryColor('control').color2}">
     <block type="control_wait">
         <value name="DURATION">
             <shadow type="math_positive_number">
@@ -3756,12 +4602,12 @@ const control = function (isInitialSetup, isStage) {
     ${categorySeparator}
 </category>
 `;
-};
+    };
 
-const sensing = function (isInitialSetup, isStage) {
-    const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
-    return `
-<category name="Sensing 🪄" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
+    const sensing = function(isInitialSetup, isStage) {
+        const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
+        return `
+<category name="%{BKY_CATEGORY_SENSING} 🪄" id="sensing" colour="${getCategoryColor('sensing').color1}" secondaryColour="${getCategoryColor('sensing').color2}">
     ${isStage ? '' : `
         <block type="sensing_touchingobject">
             <value name="TOUCHINGOBJECTMENU">
@@ -3831,116 +4677,241 @@ const sensing = function (isInitialSetup, isStage) {
     ${categorySeparator}
 </category>
 `;
-};
-/* END EXTRA BLOCKS */
+    };
+    /* END EXTRA BLOCKS */
 
-//The color changing code by Lily
-const runtime = Scratch.vm.runtime;
-// Reimplementing the color parameters
-const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
-runtime._convertBlockForScratchBlocks = function(blockInfo, categoryInfo) {
-  const res = cbfsb(blockInfo, categoryInfo);
-  //the color
-  if (blockInfo.color1) {
-    if (!res.json.color1) res.json.color1 = blockInfo.color1;
-  }
-  //Other block stuff
-  if (blockInfo.outputShape) {
-    if (!res.json.outputShape) res.json.outputShape = blockInfo.outputShape;
-  }
-  if (blockInfo.extensions) {
-    if (!res.json.extensions) res.json.extensions = blockInfo.extensions;
-  }
-  if (!res.json.branchCount) res.json.branchCount = blockInfo.branchCount;
-  return res;
-};
+    //The color changing code by Lily
+    // Reimplementing the color parameters
+    runtime._convertBlockForScratchBlocks = function(blockInfo, categoryInfo) {
+        const res = cbfsb(blockInfo, categoryInfo);
+        //the color
+        if (blockInfo.color1) {
+            if (!res.json.color1) res.json.color1 = blockInfo.color1;
+        }
+        //Other block stuff
+        if (blockInfo.outputShape) {
+            if (!res.json.outputShape) res.json.outputShape = blockInfo.outputShape;
+        }
+        if (blockInfo.extensions) {
+            if (!res.json.extensions) res.json.extensions = blockInfo.extensions;
+        }
+        if (!res.json.branchCount) res.json.branchCount = blockInfo.branchCount;
+        return res;
+    };
 
-//Re-register the categorys
-const vm = Scratch.vm;
-const categorySeparator = '<sep gap="36"/>';
-const blockSeparator = '<sep gap="36"/>';
-const gbx = runtime.getBlocksXML.bind(runtime);
-//Overriding the magic ness of getBlocksXML
-runtime.getBlocksXML = function (target) {
-    const categoryInfo = this._blockInfo;
-    const res = gbx(target);
-    //New version
-    runtime.getBlocksXML = function (target) {
+    function addMicrobitBlocks() {
+        let runtime = vm.runtime;
+        try {
+            var tmp = runtime.ext_microbit
+        } catch {
+            return ('');
+        };
+        let ext = runtime.ext_microbit;
+        if (ext.getInfoBound == undefined) ext.getInfoBound = ext.getInfo.bind(ext);
+        let egi = ext.getInfoBound;
+      //Matrix testing
+      ext.matrixValidator = function({ MATRIX }, util) {
+        MATRIX = Scratch.Cast.toString(MATRIX);
+
+        //Making sure the length is correct
+        if (MATRIX.length < 25 || (MATRIX.length % 25) != 0) return false;
+
+        //Making sure its binary
+        if ((MATRIX.replace(/[01]/g, '') !== '')) return false;
+
+        //All checks to invalidate the matrix failed which means its a matrix.
+        return true;
+      }
+      //Couplers
+      ext.matrixCoupler = function({ A }, util) {
+        return Scratch.Cast.toString(A);
+      }
+      ext.quadMatrixCoupler = function({ A, B, C, D }, util) {
+        return (`${Scratch.Cast.toString(A)}${Scratch.Cast.toString(B)}${Scratch.Cast.toString(C)}${Scratch.Cast.toString(D)}`);
+      }
+      //Matrix handling
+      ext.getMicrobitMatrix = function({ NUMBER, MATRIX }, util) {
+        NUMBER = Math.round(Scratch.Cast.toNumber(NUMBER));
+        MATRIX = Scratch.Cast.toString(MATRIX);
+        return (MATRIX.slice((NUMBER-1)*25, ((NUMBER-1)*25)+25));
+      }
+      ext.getDigitAt = function({ ROW, COLLUM, MATRIX }, util) {
+        ROW = Math.round(Scratch.Cast.toNumber(ROW));
+        COLLUM = Math.round(Scratch.Cast.toNumber(COLLUM));
+        MATRIX = Scratch.Cast.toString(MATRIX);
+
+        //Clamping
+        ROW = (ROW < 1 ? 1 : (ROW > 5 ? 5 : ROW));
+        COLLUM = (COLLUM < 1 ? 1 : (COLLUM > 5 ? 5 : COLLUM));
+
+        //Math!
+        return MATRIX.charAt(((ROW-1)*5)+(COLLUM-1));
+      }
+        ext.getInfo = function() {
+            const DefaultExtensions = window.extensionData.DefaultExtensions;
+            let tmp = egi();
+            let blocks = tmp.blocks;
+            tmp.name = "micro:bit 🪄";
+            blocks.push({
+                blockType: "label",
+                text: "Matrixes"
+            });
+            blocks = DefaultExtensions.addBlocks(blocks, [
+                {
+                  blockType: Scratch.BlockType.BOOLEAN,
+                  opcode: 'matrixValidator',
+                  text: 'is binary [MATRIX] a valid matrix?',
+                  arguments: {
+                    MATRIX: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX},
+                  }
+                },
+                {
+                  blockType: Scratch.BlockType.REPORTER,
+                  opcode: 'matrixCoupler',
+                  text: '[A]',
+                  arguments: {
+                    A: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX},
+                  }
+                },
+                {
+                  blockType: Scratch.BlockType.REPORTER,
+                  opcode: 'quadMatrixCoupler',
+                  text: ['[A] [B]', '[C] [D]'],
+                  arguments: {
+                    A: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX},
+                    B: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX},
+                    C: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX},
+                    D: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX}
+                  }
+                },
+                {
+                  blockType: Scratch.BlockType.REPORTER,
+                  opcode: 'getMicrobitMatrix',
+                  text: 'get matrix number [NUMBER] out of binary [MATRIX]',
+                  arguments: {
+                    NUMBER: {defaultValue: 1, type: Scratch.ArgumentType.NUMBER},
+                    MATRIX: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.STRING}
+                  }
+                },
+                {
+                  blockType: Scratch.BlockType.REPORTER,
+                  opcode: 'getDigitAt',
+                  text: 'get pixel at row [ROW] and collum [COLLUM] of matrix [MATRIX]',
+                  arguments: {
+                    ROW: {defaultValue: 3, type: Scratch.ArgumentType.NUMBER},
+                    COLLUM: {defaultValue: 5, type: Scratch.ArgumentType.NUMBER},
+                    MATRIX: {defaultValue: '0101010101100010101000100', type: Scratch.ArgumentType.MATRIX}
+                  }
+                }
+              ]);
+            return tmp;
+        }
+        vm.extensionManager.refreshBlocks();
+    }
+
+    window.extensionData.DefaultExtensions = {
+        addBlocks(old_blocks, new_blocks) {
+            for (let block in new_blocks) {
+                block = new_blocks[block];
+                old_blocks.push(block);
+            }
+            return old_blocks;
+        }
+    }
+    vm.on('EXTENSION_ADDED', e => {
+        function testBlocks() {
+            if (e.id === 'microbit') addMicrobitBlocks();
+        }
+        setTimeout(testBlocks, 150);
+    });
+
+    Scratch.extensions.register(new TurboChargedEvents());
+
+    //Overriding the magic ness of getBlocksXML
+    //The original code is credited to the very lovely lilymakesthings!
+    //Her scratch: https://scratch.mit.edu/users/LilyMakesThings
+    //XML Injector / Overrider
+    runtime.getBlocksXML = function(target) {
         const categoryInfo = this._blockInfo;
         const res = gbx(target);
-        //Overrides the categorys xml
-        res.forEach((elem, idx) => {
-            if (categoryInfo[idx].id === 'motion') {
+        res.map(category => {
+            if (category.id === 'motion') {
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                elem.xml = motion(false, target.isStage, target.id);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = motion(false, target.isStage, target.id);
             }
-            if (categoryInfo[idx].id === 'operators') {
+            if (category.id === 'looks') {
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                elem.xml = operators(false, target.isStage, target.id);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = looks(false, target.isStage, target.id, target.getCurrentCostume().name, stage.getCurrentCostume().name);
             }
-            if (categoryInfo[idx].id === 'sound') {
+            if (category.id === 'sound') {
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                elem.xml = sound(false, target.isStage, target.id);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = sound(false, target.isStage, target.id);
             }
-            if (categoryInfo[idx].id === 'sensing') {
+            if (category.id === 'event') { //events is a bitch
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                elem.xml = sensing(false, target.isStage, target.id);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = events(false, target.isStage, target.id);
             }
-            if (categoryInfo[idx].id === 'control') {
+            if (category.id === 'control') {
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                elem.xml = control(false, target.isStage, target.id);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = control(false, target.isStage, target.id);
             }
-            if (categoryInfo[idx].id === 'event') {//events is evil
+            if (category.id === 'sensing') {
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                elem.xml = events(false, target.isStage, target.id);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = sensing(false, target.isStage, target.id);
             }
-            if (categoryInfo[idx].id === 'looks') {
+            if (category.id === 'operators') {
                 let {
-                    editingTarget: target
-                    , runtime
+                    editingTarget: target,
+                    runtime
                 } = vm;
-                const stage = vm.runtime.targets[0];
-                elem.xml = looks(false, target.isStage, target.id, target.getCurrentCostume().name, stage.getCurrentCostume().name);
+                const stage = runtime.getTargetForStage();
+                if (!target) target = stage;
+                category.xml = operators(false, target.isStage, target.id);
             }
-            if (categoryInfo[idx].id === 'event') {
-                let {
-                    editingTarget: target
-                    , runtime
-                } = vm;
-                elem.xml = events(false, target.isStage, target.id);
-            }
+            return category;
         });
         return res;
     }
-}
 
-//Credits is registered via some added XML
-Scratch.extensions.register(new TurboChargedMotion());
-Scratch.extensions.register(new TurboChargedLooks());
-Scratch.extensions.register(new TurboChargedSound());
-Scratch.extensions.register(new TurboChargedEvents());
-//control is just a bitch as it breaks the isStage detection.
-Scratch.extensions.register(new TurboChargedSensing());
-Scratch.extensions.register(new TurboChargedOperators());
-//variables is not accesible
-//idk if my blocks is accesible and I also have no reason to mess with it.
+    //Credits is registered via some added XML
+    Scratch.extensions.register(new TurboChargedMotion());
+    Scratch.extensions.register(new TurboChargedLooks());
+    Scratch.extensions.register(new TurboChargedSound());
+    //control is an asssssssssss its colors decided to be messed uo.
+    Scratch.extensions.register(new TurboChargedControl());
+    Scratch.extensions.register(new TurboChargedSensing());
+    Scratch.extensions.register(new TurboChargedOperators());
+    //variables is not accesible
+    //idk if my blocks is accesible and I also have no reason to mess with it.
 
 })(Scratch);
