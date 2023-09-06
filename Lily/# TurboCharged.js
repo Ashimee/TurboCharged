@@ -2735,7 +2735,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: 'gtEqual',
                     blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[OPERAND1] â‰¥ [OPERAND2]',
+                    text: '[OPERAND1] ≥ [OPERAND2]',
                     arguments: {
                         OPERAND1: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2749,7 +2749,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: 'ltEqual',
                     blockType: Scratch.BlockType.BOOLEAN,
-                    text: '[OPERAND1] â‰¤ [OPERAND2]',
+                    text: '[OPERAND1] ≤ [OPERAND2]',
                     arguments: {
                         OPERAND1: {
                             type: Scratch.ArgumentType.NUMBER,

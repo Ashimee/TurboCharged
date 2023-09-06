@@ -1,4 +1,5 @@
 MINIFY = False
+USE_URL = False
 
 import os
 
@@ -55,15 +56,24 @@ generated = generated.replace('//SPECIAL CATEGORYS', specials)
 #optional minifying
 if MINIFY:
     print('Minified is on.\nMinifying..')
-    import requests
-    response = requests.post('https://www.toptal.com/developers/javascript-minifier/api/raw', data=dict(input=generated)).text
-    generated = '{}'.format(response)
+    if not USE_URL:
+        USE_URL = True
+        print('Currently there is no library to minify the JS correctly, so URL has been used')
+    if USE_URL:
+        import requests
+        response = requests.post('https://www.toptal.com/developers/javascript-minifier/api/raw', data=dict(input=generated)).text
+        generated = '{}'.format(response)
+    else:
+        from css_html_js_minify import process_single_js_file, js_minify
+        generated = js_minify(generated)
     print('Minified')
 
 #fixing emojis
 print('Fixing emojis')
 generated = generated.replace('ðŸª„', '🪄', -1) #magic wand
 generated = generated.replace('ðŸ¥š', '🥚', -1) #egg
+generated = generated.replace('â‰¥', '≥', -1) #greater-than or equal
+generated = generated.replace('â‰¤', '≤', -1) #less-than or equal
 
 #saving the generated JS
 print('Writing to file')
