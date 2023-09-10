@@ -638,8 +638,7 @@ class TurboChargedControl {
                             type: Scratch.ArgumentType.STRING,
                             menu: 'spriteMenu'
                         }
-                    },
-                    text: 'is clone?'
+                    }
                 }, {
                     opcode: 'clonesplusdeleteCloneWithVar',
                     blockType: Scratch.BlockType.COMMAND,
@@ -660,6 +659,7 @@ class TurboChargedControl {
                 {
                     opcode: 'clonesplusisClone',
                     blockType: Scratch.BlockType.BOOLEAN,
+                    text: 'is clone?'
                 },
 
                 {
@@ -956,7 +956,7 @@ class TurboChargedControl {
 
 const control = function(isInitialSetup, isStage) {
     return `
-<category name="%{BKY_CATEGORY_CONTROL} 🪄" id="control" ${Colors.motion.xml}>
+<category name="%{BKY_CATEGORY_CONTROL} 🪄" id="control" ${Colors.control.xml}>
 <block type="control_wait">
     <value name="DURATION">
         <shadow type="math_positive_number">
@@ -2655,21 +2655,21 @@ class TurboChargedOperators {
                     }
                 },
                 /*{
-                                   opcode: 'percentin',
-                                   blockType: Scratch.BlockType.REPORTER,
-                                   text: '[AMOUNT] is what percent of [MAX]?',
-                                   disableMonitor: true,
-                                   arguments: {
-                                       PERCENT: {
-                                           type: Scratch.ArgumentType.NUMBER,
-                                           defaultValue: '10'
-                                       },
-                                       MAX: {
-                                           type: Scratch.ArgumentType.NUMBER,
-                                           defaultValue: '50'
-                                       }
-                                   }
-                               },*/
+                    opcode: 'percentin',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '[AMOUNT] is what percent of [MAX]?',
+                    disableMonitor: true,
+                    arguments: {
+                        PERCENT: {
+                            type: Scratch.ArgumentType.NUMBER,
+                            defaultValue: '10'
+                        },
+                        MAX: {
+                            type: Scratch.ArgumentType.NUMBER,
+                            defaultValue: '50'
+                        }
+                    }
+                },*/
                 {
                     opcode: 'percentis',
                     blockType: Scratch.BlockType.REPORTER,
@@ -4543,7 +4543,7 @@ class TurboChargedSensing {
 const sensing = function(isInitialSetup, isStage) {
     const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
     return `
-<category name="%{BKY_CATEGORY_SENSING} 🪄" id="sensing" ${Colors.motion.xml}>
+<category name="%{BKY_CATEGORY_SENSING} 🪄" id="sensing" ${Colors.sensing.xml}>
 ${isStage ? '' : `
     <block type="sensing_touchingobject">
         <value name="TOUCHINGOBJECTMENU">
@@ -4899,6 +4899,15 @@ runtime.getBlocksXML = function(target) {
             if (!target) target = stage;
             category.xml = operators(false, target.isStage, target.id);
         }
+        if (category.id === 'myBlocks') {
+            let {
+                editingTarget: target,
+                runtime
+            } = vm;
+            const stage = runtime.getTargetForStage();
+            if (!target) target = stage;
+            category.xml = myBlocks(false, target.isStage, target.id);
+        }
         return category;
     });
     return res;
@@ -4912,5 +4921,4 @@ Scratch.extensions.register(new TurboChargedControl());
 Scratch.extensions.register(new TurboChargedSensing());
 Scratch.extensions.register(new TurboChargedOperators());
 //variables is not accesible
-//idk if my blocks is accesible and I also have no reason to mess with it.
 })(Scratch);

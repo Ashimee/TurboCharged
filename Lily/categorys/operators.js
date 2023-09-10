@@ -24,21 +24,21 @@ class TurboChargedOperators {
                     }
                 },
                 /*{
-                                   opcode: 'percentin',
-                                   blockType: Scratch.BlockType.REPORTER,
-                                   text: '[AMOUNT] is what percent of [MAX]?',
-                                   disableMonitor: true,
-                                   arguments: {
-                                       PERCENT: {
-                                           type: Scratch.ArgumentType.NUMBER,
-                                           defaultValue: '10'
-                                       },
-                                       MAX: {
-                                           type: Scratch.ArgumentType.NUMBER,
-                                           defaultValue: '50'
-                                       }
-                                   }
-                               },*/
+                    opcode: 'percentin',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '[AMOUNT] is what percent of [MAX]?',
+                    disableMonitor: true,
+                    arguments: {
+                        PERCENT: {
+                            type: Scratch.ArgumentType.NUMBER,
+                            defaultValue: '10'
+                        },
+                        MAX: {
+                            type: Scratch.ArgumentType.NUMBER,
+                            defaultValue: '50'
+                        }
+                    }
+                },*/
                 {
                     opcode: 'percentis',
                     blockType: Scratch.BlockType.REPORTER,

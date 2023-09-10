@@ -14,7 +14,7 @@ class TurboChargedSensing {
 const sensing = function(isInitialSetup, isStage) {
     const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
     return `
-<category name="%{BKY_CATEGORY_SENSING} 🪄" id="sensing" ${Colors.motion.xml}>
+<category name="%{BKY_CATEGORY_SENSING} 🪄" id="sensing" ${Colors.sensing.xml}>
 ${isStage ? '' : `
     <block type="sensing_touchingobject">
         <value name="TOUCHINGOBJECTMENU">

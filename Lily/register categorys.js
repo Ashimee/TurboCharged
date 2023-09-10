@@ -7,4 +7,3 @@ Scratch.extensions.register(new TurboChargedControl());
 Scratch.extensions.register(new TurboChargedSensing());
 Scratch.extensions.register(new TurboChargedOperators());
 //variables is not accesible
-//idk if my blocks is accesible and I also have no reason to mess with it.

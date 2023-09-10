@@ -216,8 +216,7 @@ class TurboChargedControl {
                             type: Scratch.ArgumentType.STRING,
                             menu: 'spriteMenu'
                         }
-                    },
-                    text: 'is clone?'
+                    }
                 }, {
                     opcode: 'clonesplusdeleteCloneWithVar',
                     blockType: Scratch.BlockType.COMMAND,
@@ -238,6 +237,7 @@ class TurboChargedControl {
                 {
                     opcode: 'clonesplusisClone',
                     blockType: Scratch.BlockType.BOOLEAN,
+                    text: 'is clone?'
                 },
 
                 {
@@ -534,7 +534,7 @@ class TurboChargedControl {
 
 const control = function(isInitialSetup, isStage) {
     return `
-<category name="%{BKY_CATEGORY_CONTROL} 🪄" id="control" ${Colors.motion.xml}>
+<category name="%{BKY_CATEGORY_CONTROL} 🪄" id="control" ${Colors.control.xml}>
 <block type="control_wait">
     <value name="DURATION">
         <shadow type="math_positive_number">

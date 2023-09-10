@@ -68,6 +68,15 @@ runtime.getBlocksXML = function(target) {
             if (!target) target = stage;
             category.xml = operators(false, target.isStage, target.id);
         }
+        if (category.id === 'myBlocks') {
+            let {
+                editingTarget: target,
+                runtime
+            } = vm;
+            const stage = runtime.getTargetForStage();
+            if (!target) target = stage;
+            category.xml = myBlocks(false, target.isStage, target.id);
+        }
         return category;
     });
     return res;
