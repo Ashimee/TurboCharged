@@ -9,6 +9,11 @@ generated = ''
 with open('./GENERATION BASE.js', 'r') as file:
     generated = file.read()
 
+#adding ScratchBlocks deepfake
+print('Adding ScratchBlocks')
+with open('./scratch-blocks.js', 'r') as file:
+    generated = generated.replace('//scratch blocks', file.read())
+
 #adding the globals
 print('Adding globals')
 with open('./globals.js', 'r') as file:

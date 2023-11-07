@@ -14,16 +14,78 @@ class TurboChargedMotion {
                     text: 'Credits',
                     func: 'credit',
                 }, {
-
                     disableMonitor: true,
                     opcode: 'credit_version',
                     func: 'credit_version',
-                    blockType: Scratch.BlockType.REPORTER,
+                    blockType: Scratch.BlockType.COMMAND,
                     text: 'TurboCharged Version',
                     isDynamic: true,
                     color1: '#ffb6c1'
                 },
-                /* end credit blocks and start motion */
+                /* end credit blocks and start variables */
+                /* this block of code is for the variables category */
+                {
+                    hideFromPalette: true,
+                    disableMonitor: true,
+                    opcode: 'data_test',
+                    func: 'data_test',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'Test',
+                    isDynamic: true,
+                    color1: Colors.data.primary
+                },
+                {
+                    disableMonitor: true,
+                    opcode: 'data_getVariable',
+                    func: 'data_getVariable',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: 'var [VARIABLE]',
+                    isDynamic: true,
+                    color1: Colors.data.primary,
+                    color2: Colors.data.secondary,
+                    color3: Colors.data.tertiary,
+                    arguments: {
+                        VARIABLE: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'my variable'
+                        }
+                    },
+                },
+                {
+                    disableMonitor: true,
+                    opcode: 'data_deleteVariable',
+                    func: 'data_deleteVariable',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'delete variable [VARIABLE]',
+                    isDynamic: true,
+                    color1: Colors.data.primary,
+                    color2: Colors.data.secondary,
+                    color3: Colors.data.tertiary,
+                    arguments: {
+                        VARIABLE: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'my variable'
+                        }
+                    },
+                },
+                {
+                    disableMonitor: true,
+                    opcode: 'data_hasVariable',
+                    func: 'data_hasVariable',
+                    blockType: Scratch.BlockType.BOOLEAN,
+                    text: 'variable [VARIABLE] exists?',
+                    isDynamic: true,
+                    color1: Colors.data.primary,
+                    color2: Colors.data.secondary,
+                    color3: Colors.data.tertiary,
+                    arguments: {
+                        VARIABLE: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'my variable'
+                        }
+                    },
+                },
+                /* end variables blocks and start motion */
                 {
                     opcode: 'rotationStyle',
                     blockType: Scratch.BlockType.REPORTER,
@@ -174,6 +236,10 @@ class TurboChargedMotion {
                 }
             ],
             menus: {
+                variablesMenu: {
+                    acceptReporters: true,
+                    items: 'getVariables'
+                },
                 moremotionWHAT: {
                     acceptreporters: true,
                     items: [
@@ -191,7 +257,40 @@ class TurboChargedMotion {
     credit_version() {
         return parseInt(version.toString());
     }
-    /* end credit blocks and start motion */
+    /* end credit blocks and start variables */
+    /* this block of code is for the variables category */
+    getVariables() {
+        // @ts-expect-error - Blockly not typed yet
+        // eslint-disable-next-line no-undef
+        const variables = vm.runtime.getEditingTarget().getAllVariableNamesInScopeByType('', '');
+        if (variables.length > 0) {
+            return variables;
+        } else {
+            return [{
+                text: "",
+                value: ""
+            }];
+        }
+    }
+    data_test(args, util) {
+        vm.runtime.visualReport(util.thread.peekStack(), 'Custom block in variables???');
+    }
+    data_getVariable(args, util) {
+        let variable = getVariableByName(args.VARIABLE, util.target);
+        if (variable == null || variable == undefined) return '';
+        return variable.value;
+        vm.runtime.visualReport(util.thread.peekStack(), 'W.I.P');
+    }
+    data_hasVariable(args, util) {
+        return util.target.getAllVariableNamesInScopeByType('', '').includes(args.VARIABLE);
+    }
+    data_createVariable(args, util) {
+        vm.runtime.visualReport(util.thread.peekStack(), 'W.I.P');
+    }
+    data_deleteVariable(args, util) {
+        deleteVariableByName(args.VARIABLE, util.target);
+    }
+    /* end variables blocks and start motion */
 
     rotationStyle(args, util) {
         return util.target.rotationStyle;

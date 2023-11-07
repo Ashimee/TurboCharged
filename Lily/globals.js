@@ -6,6 +6,7 @@ const gbx = runtime.getBlocksXML.bind(runtime);
 const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
 const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
 const eventsID = 'event';
+const Stage = runtime.getTargetForStage();
 
 //THE CREDITS
     const cred_comment = (function(){/*this is here to get the comment*/

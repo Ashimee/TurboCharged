@@ -290,7 +290,12 @@ class TurboChargedControl {
                     }, {
                         text: 'volume',
                         value: 'volume'
-                    }, ]
+                    }, ],
+                    // this is for the variables category
+                    variablesMenu2: {
+                        acceptReporters: true,
+                        items: 'getVariables2'
+                    }
                 }
             }
         }
@@ -530,6 +535,19 @@ class TurboChargedControl {
         }
     }
     //end block
+
+    //this is for the variables category
+    getVariables2() {
+        const variables = target.getAllVariableNamesInScopeByType('', '');
+        if (variables.length > 0) {
+            return variables;
+        } else {
+            return [{
+                text: "",
+                value: ""
+            }];
+        }
+    }
 }
 
 const control = function(isInitialSetup, isStage) {
