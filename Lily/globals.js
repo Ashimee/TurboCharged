@@ -11,7 +11,7 @@ const Stage = runtime.getTargetForStage();
 //THE CREDITS
     const cred_comment = (function(){/*this is here to get the comment*/
         /**
-         * v9.1
+         * v9.2
          * Idea by LilyMakesThings.
          * XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.
          * Smooshed by 0znzw

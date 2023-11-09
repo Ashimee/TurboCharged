@@ -88,6 +88,12 @@ const generateVariableField = (function(vari, type){
     return `<field name="${type}" id="${vari.id}" variabletype="${vari.type}">${vari.name}</field>`;
 });
 
+
+// <field name="LIST" variabletype="list" id="">variablename</field>
+const generateListField = (function(vari){
+    return `<field name="LIST" id="${vari.id}" variabletype="list">${vari.name}</field>`;
+});
+
 // <block id="variableId" type="data_variable">
 //    <field name="VARIABLE">variablename</field>
 // </block>
@@ -95,6 +101,15 @@ const generateVariableBlock = (function(vari){
     const variType = (vari.type != '' ? 'list' : 'variable');
     const field = generateVariableField(vari, variType.toUpperCase());
     const xml = `<block type="data_${variType}" id="${vari.id}">${field}</block>`;
+    return xml;
+});
+
+// <block id="variableId" type="data_listcontents">
+//    <field name="LIST">variablename</field>
+// </block>
+const generateListBlock = (function(vari){
+    const field = `<field name="LIST">${vari.name}</field>`;
+    const xml = `<block type="data_listcontents" id="${vari.id}">${field}</block>`;
     return xml;
 });
 

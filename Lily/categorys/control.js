@@ -538,14 +538,12 @@ class TurboChargedControl {
 
     //this is for the variables category
     getVariables2() {
+        const target = vm.runtime.getEditingTarget();
         const variables = target.getAllVariableNamesInScopeByType('', '');
         if (variables.length > 0) {
             return variables;
         } else {
-            return [{
-                text: "",
-                value: ""
-            }];
+            return [];
         }
     }
 }
