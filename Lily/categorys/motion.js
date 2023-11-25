@@ -255,7 +255,7 @@ class TurboChargedMotion {
         credits_blob();
     }
     credit_version() {
-        return parseInt(version.toString());
+        return version;
     }
     /* end credit blocks and start variables */
     /* this block of code is for the variables category */
