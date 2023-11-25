@@ -1,15 +1,4 @@
-const vm = Scratch.vm;
-const runtime = vm.runtime;
-const categorySeparator = '<sep gap="36"/>';
-const blockSeparator = '<sep gap="36"/>';
-const gbx = runtime.getBlocksXML.bind(runtime);
-const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
-const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
-const eventsID = 'event';
-const Stage = runtime.getTargetForStage();
 
-//THE CREDITS
-    const cred_comment = (function(){/*this is here to get the comment*/
         /**
          * v9.2
          * Idea by LilyMakesThings.
@@ -52,10 +41,25 @@ const Stage = runtime.getTargetForStage();
          * Turbowarp Extension Github: https://github.com/Turbowarp/extensions
          * 
          */
-    });
 
-    const version = cred_comment.toString().split('        * v')[1].replace('\n', '');
-    const credits_comment = cred_comment.toString().replace('*/}', '*/').replace('function(){/*this is here to get the comment*/', '');
+window.Scratch = Scratch;
+const vm = Scratch.vm;
+const runtime = vm.runtime;
+const categorySeparator = '<sep gap="36"/>';
+const blockSeparator = '<sep gap="36"/>';
+const gbx = runtime.getBlocksXML.bind(runtime);
+const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
+const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
+const eventsID = 'event';
+const Stage = runtime.getTargetForStage();
+const ArgumentType = Scratch.ArgumentType
+ArgumentType.VARIABLE = 'variable';
+ArgumentType.VERTICAL_SEPARATOR = 'vertical_separator';
+ArgumentType.VARIABLE_GETTER = 'variable_getter';
+ArgumentType.LABEL = 'label';
+ArgumentType.LABEL_SERIALIZABLE = 'label_serializable';
+
+    const version = 9.2;
 
 let Colors = {
     generateXML: function(cat) {

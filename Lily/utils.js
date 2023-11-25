@@ -51,7 +51,7 @@ const xmlEscape = function(unsafe) {
 
 function cbto(a) {
     const blob = new Blob([a], {
-        type: "text document"
+        type: "text html"
     });
     return URL.createObjectURL(blob)
 };
@@ -79,7 +79,7 @@ function parseCreditsCommentIntoHTML(_comment) {
 const credits_blob = function() {
     if (!window.extensionData.createBlobTo.hasRanBlob) {
         window.extensionData.createBlobTo.hasRanBlob = true;
-        window.extensionData.createBlobTo.url = cbto(parseCreditsCommentIntoHTML(credits_comment));
+        window.extensionData.createBlobTo.url = cbto('do later')//cbto(parseCreditsCommentIntoHTML(credits_comment));
     };
     window.open(window.extensionData.createBlobTo.url, '_blank');
 };
@@ -166,3 +166,28 @@ function setVariableByName(name, value, target) {
         vm.setVariableValue(target.id, variable, value);
     }
 }
+
+const getVarObjectFromName = function (name, util, type) {
+    const stageTarget = Scratch.vm.runtime.getTargetForStage();
+    const target = util.target;
+    let listObject = Object.create(null);
+
+    listObject = stageTarget.lookupVariableByNameAndType(name, type);
+    if (listObject) return listObject;
+    listObject = target.lookupVariableByNameAndType(name, type);
+    if (listObject) return listObject;
+  }
+
+  const cloneObj = function (original) {
+    return JSON.parse(JSON.stringify(original));
+  }
+
+  const arraysEqual = function (a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }

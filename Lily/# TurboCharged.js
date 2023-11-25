@@ -19,6 +19,7 @@ const ScratchBlocks = new Proxy(ScratchBlocksClone_Internal, {
     },
     get: function(e, a) {return e[a]}
 });
+window.Scratch = Scratch;
 const vm = Scratch.vm;
 const runtime = vm.runtime;
 const categorySeparator = '<sep gap="36"/>';
@@ -28,6 +29,12 @@ const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in som
 const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
 const eventsID = 'event';
 const Stage = runtime.getTargetForStage();
+const ArgumentType = Scratch.ArgumentType
+ArgumentType.VARIABLE = 'variable';
+ArgumentType.VERTICAL_SEPARATOR = 'vertical_separator';
+ArgumentType.VARIABLE_GETTER = 'variable_getter';
+ArgumentType.LABEL = 'label';
+ArgumentType.LABEL_SERIALIZABLE = 'label_serializable';
 
 //THE CREDITS
     const cred_comment = (function(){/*this is here to get the comment*/
@@ -523,6 +530,31 @@ function setVariableByName(name, value, target) {
         vm.setVariableValue(target.id, variable, value);
     }
 }
+
+const getVarObjectFromName = function (name, util, type) {
+    const stageTarget = Scratch.vm.runtime.getTargetForStage();
+    const target = util.target;
+    let listObject = Object.create(null);
+
+    listObject = stageTarget.lookupVariableByNameAndType(name, type);
+    if (listObject) return listObject;
+    listObject = target.lookupVariableByNameAndType(name, type);
+    if (listObject) return listObject;
+  }
+
+  const cloneObj = function (original) {
+    return JSON.parse(JSON.stringify(original));
+  }
+
+  const arraysEqual = function (a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
 
 class TurboChargedControl {
     getInfo() {
@@ -5408,6 +5440,28 @@ runtime.getBlocksXML = function(target) {
     });
     return res;
 }
+  // Bru ima keep this file name. its funny out of context.
+  // From Xeltalliv's example:
+  // https://github.com/Xeltalliv/extensions/blob/examples/examples/other-default-field-types.js
+
+  //im sorry i have to change the bind name
+  const transfBound = runtime._convertPlaceholders.bind(runtime);
+  runtime._convertPlaceholders = function(context, match, placeholder) {
+    const retVal = transfBound(context, match, placeholder);
+
+    const argInfo = context.blockInfo.arguments[placeholder] || {};
+    const argsName = `args${context.outLineNum}`;
+    const blockArgs = context.blockJSON[argsName];
+    const argJSON = blockArgs[blockArgs.length-1];
+    
+    if (argInfo.type === ArgumentType.VARIABLE) {
+      argJSON.type = 'field_variable';
+      argJSON.variableTypes = [argInfo.variableType ?? ''];
+      if (argInfo.variable) argJSON.variable = argInfo.variable;
+    }
+    return retVal;
+  }
+
 //Credits is registered via some added XML
 Scratch.extensions.register(new TurboChargedMotion());
 Scratch.extensions.register(new TurboChargedLooks());
