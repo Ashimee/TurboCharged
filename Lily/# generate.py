@@ -76,7 +76,7 @@ if MINIFY:
     else:
         from css_html_js_minify import process_single_js_file, js_minify
         generated = js_minify(generated)
-    generated = '/* View the unminified source here: https://github.com/SurvExe1Pc/TurboCharged/ */\n{}'.format(generated)
+    generated = '/* View the unminified source here: https://github.com/SurvExe1Pc/TurboCharged/ */\n//@ts-ignore\n{}'.format(generated)
     print('Minified')
 
 #fixing emojis
