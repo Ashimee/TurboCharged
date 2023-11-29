@@ -10,7 +10,7 @@ class TurboChargedOperators {
             blocks: [{
                     opcode: 'percentof',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: 'what is [PERCENT]% of [AMOUNT]?',
+                    text: '[PERCENT]% of [AMOUNT]?',
                     disableMonitor: true,
                     arguments: {
                         PERCENT: {
@@ -57,7 +57,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: 'percentUD',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: 'what is [AMOUNT] [MODE] by [PERCENT]%?',
+                    text: '[AMOUNT] [MODE] by [PERCENT]%?',
                     disableMonitor: true,
                     arguments: {
                         AMOUNT: {
@@ -392,7 +392,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: "textplusunicodeof",
                     blockType: Scratch.BlockType.REPORTER,
-                    text: "Unicode of [STRING]",
+                    text: "unicode of [STRING]",
                     arguments: {
                         STRING: {
                             type: Scratch.ArgumentType.STRING,
@@ -402,7 +402,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: "textplusunicodefrom",
                     blockType: Scratch.BlockType.REPORTER,
-                    text: "Unicode [NUM] as letter",
+                    text: "unicode [NUM] as letter",
                     arguments: {
                         NUM: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -515,7 +515,7 @@ class TurboChargedOperators {
                         TEXTCASE: {
                             type: Scratch.ArgumentType.STRING,
                             menu: "textCase",
-                            defaultValue: window.extensionData.textPlus.CaseParam.LOWERCASE
+                            defaultValue: vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE
                         }
                     }
                 }, {
@@ -530,7 +530,7 @@ class TurboChargedOperators {
                         TEXTCASE: {
                             type: Scratch.ArgumentType.STRING,
                             menu: "textCase",
-                            defaultValue: window.extensionData.textPlus.CaseParam.UPPERCASE
+                            defaultValue: vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE
                         }
                     }
                 }, {
@@ -604,19 +604,19 @@ class TurboChargedOperators {
                     acceptReporters: true,
                     items: [{
                         text: "lowercase",
-                        value: window.extensionData.textPlus.CaseParam.LOWERCASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE
                     }, {
                         text: "UPPERCASE",
-                        value: window.extensionData.textPlus.CaseParam.UPPERCASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE
                     }, {
                         text: "Title Case",
-                        value: window.extensionData.textPlus.CaseParam.TITLECASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.TITLECASE
                     }, {
                         text: "Exactly Title Case",
-                        value: window.extensionData.textPlus.CaseParam.EXACTTITLECASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.EXACTTITLECASE
                     }, {
                         text: "MiXeD CaSe",
-                        value: window.extensionData.textPlus.CaseParam.MIXEDCASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.MIXEDCASE
                     }]
                 },
                 castType: {
@@ -846,18 +846,18 @@ class TurboChargedOperators {
         args.ITEM = Number(args.ITEM) || 0;
         // Cache the last split
         if (!(
-                window.extensionData.textPlus.splitCache &&
-                window.extensionData.textPlus.splitCache.string === args.STRING &&
-                window.extensionData.textPlus.splitCache.split === args.SPLIT
+                vm.TurboCharged.extensionData.textPlus.splitCache &&
+                vm.TurboCharged.extensionData.textPlus.splitCache.string === args.STRING &&
+                vm.TurboCharged.extensionData.textPlus.splitCache.split === args.SPLIT
             )) {
             const regex = this._caseInsensitiveRegex(args.SPLIT);
-            window.extensionData.textPlus.splitCache = {
+            vm.TurboCharged.extensionData.textPlus.splitCache = {
                 string: args.STRING,
                 split: args.SPLIT,
                 arr: args.STRING.split(regex)
             };
         }
-        return window.extensionData.textPlus.splitCache.arr[args.ITEM - 1] || "";
+        return vm.TurboCharged.extensionData.textPlus.splitCache.arr[args.ITEM - 1] || "";
     }
     textpluscount(args, util) {
         // Fill cache
@@ -866,7 +866,7 @@ class TurboChargedOperators {
             STRING: args.STRING,
             ITEM: 0
         }, util);
-        return (window.extensionData.textPlus.splitCache.arr.length - 1) || 0;
+        return (vm.TurboCharged.extensionData.textPlus.splitCache.arr.length - 1) || 0;
     }
     textplusreplace(args, util) {
         args.STRING = args.STRING.toString();
@@ -913,21 +913,21 @@ class TurboChargedOperators {
             args.ITEM = Number(args.ITEM) || 0;
             // Cache the last matched string
             if (!(
-                    window.extensionData.textPlus.matchCache &&
-                    window.extensionData.textPlus.matchCache.string === args.STRING &&
-                    window.extensionData.textPlus.matchCache.regex === args.REGEX &&
-                    window.extensionData.textPlus.matchCache.flags === args.FLAGS
+                    vm.TurboCharged.extensionData.textPlus.matchCache &&
+                    vm.TurboCharged.extensionData.textPlus.matchCache.string === args.STRING &&
+                    vm.TurboCharged.extensionData.textPlus.matchCache.regex === args.REGEX &&
+                    vm.TurboCharged.extensionData.textPlus.matchCache.flags === args.FLAGS
                 )) {
                 const newFlags = args.FLAGS.includes("g") ? args.FLAGS : args.FLAGS + "g";
                 const regex = new RegExp(args.REGEX, newFlags);
-                window.extensionData.textPlus.matchCache = {
+                vm.TurboCharged.extensionData.textPlus.matchCache = {
                     string: args.STRING,
                     regex: args.REGEX,
                     flags: args.FLAGS,
                     arr: args.STRING.match(regex) || []
                 };
             }
-            return window.extensionData.textPlus.matchCache.arr[args.ITEM - 1] || "";
+            return vm.TurboCharged.extensionData.textPlus.matchCache.arr[args.ITEM - 1] || "";
         } catch (e) {
             console.error(e);
             return "";
@@ -938,7 +938,7 @@ class TurboChargedOperators {
         // (ITEM is casted into 0,
         // but we don't care about the return value)
         this.matchRegex(args, util);
-        return window.extensionData.textPlus.matchCache.arr.length || 0;
+        return vm.TurboCharged.extensionData.textPlus.matchCache.arr.length || 0;
     }
     textplustestRegex(args, util) {
         try {
@@ -955,22 +955,22 @@ class TurboChargedOperators {
         const string = args.STRING.toString();
         const textCase = args.TEXTCASE.toString();
         switch (textCase) {
-            case window.extensionData.textPlus.CaseParam.LOWERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE:
                 return string.toLowerCase() === string;
-            case window.extensionData.textPlus.CaseParam.UPPERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE:
                 return string.toUpperCase() === string;
-            case window.extensionData.textPlus.CaseParam.MIXEDCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.MIXEDCASE:
                 return (!(
                     string.toUpperCase() === string ||
                     string.toLowerCase() === string
                 ));
-            case window.extensionData.textPlus.CaseParam.TITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.TITLECASE:
                 return string.split(/\b/g).every((word) => {
                     if (!word) return true;
                     const titleCased = word[0].toUpperCase() + word.substring(1);
                     return word === titleCased;
                 });
-            case window.extensionData.textPlus.CaseParam.EXACTTITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.EXACTTITLECASE:
                 return string.split(/\b/g).every((word) => {
                     if (!word) return true;
                     const titleCased = word[0].toUpperCase() + word.substring(1).toLowerCase();
@@ -984,22 +984,22 @@ class TurboChargedOperators {
         const string = args.STRING.toString();
         const textCase = args.TEXTCASE.toString();
         switch (textCase) {
-            case window.extensionData.textPlus.CaseParam.LOWERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE:
                 return string.toLowerCase();
-            case window.extensionData.textPlus.CaseParam.UPPERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE:
                 return string.toUpperCase();
-            case window.extensionData.textPlus.CaseParam.MIXEDCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.MIXEDCASE:
                 return Array.from(string).map(
                     (char, index) => index % 2 === 0 ?
                     char.toUpperCase() :
                     char.toLowerCase()
                 ).join("");
-            case window.extensionData.textPlus.CaseParam.TITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.TITLECASE:
                 return string.split(/\b/g).map((word) => {
                     if (!word) return '';
                     return word[0].toUpperCase() + word.substring(1);
                 }).join("");
-            case window.extensionData.textPlus.CaseParam.EXACTTITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.EXACTTITLECASE:
                 return string.split(/\b/g).map((word) => {
                     if (!word) return '';
                     return word[0].toUpperCase() + word.substring(1).toLowerCase();

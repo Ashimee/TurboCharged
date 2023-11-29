@@ -3,8 +3,9 @@
 //XML Injector / Overrider
 runtime.getBlocksXML = function(target) {
     const categoryInfo = this._blockInfo;
-    const res = gbx(target);
+    const res = vm.TurboCharged.gbx(target);
     res.map(category => {
+        if (vm.TurboCharged.blockedCategories.includes(category.id) || !vm.TurboCharged.enabled) return category;
         if (category.id === 'motion') {
             let {
                 editingTarget: target,

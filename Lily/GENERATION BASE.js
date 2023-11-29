@@ -1,4 +1,4 @@
-//Credits in the "cred_comment" function.
+//credits
 (function(Scratch) {'use strict';globalThis.Scratch = Scratch;
 //scratch blocks
 //globals

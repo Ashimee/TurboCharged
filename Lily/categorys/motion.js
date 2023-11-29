@@ -457,6 +457,7 @@ class TurboChargedCredits {
 const credits = function(isInitialSetup, isStage, targetId) {
     return `
 <category name="Credits 🪄" id="credits" colour="#ffb6c1" secondaryColour="#ffc0cb"> //oooooo :D
+<label text="/!\\ THIS IS ENGLISH ONLY /!\\"></label>
 <button text="Credits" callbackKey="EXTENSION_CALLBACK" callbackData="motion_credit"></button>
 <block type="motion_credit_version">
 <mutation blockInfo='{"blockType":"reporter","terminal":false,"blockAllThreads":false,"arguments":{},"opcode":"credit_version","text":"TurboCharged Version","isDynamic":true,"color1":"#ffb6c1","isTerminal":false,"disableMonitor":true}'/> // this was extremely annoying but worth it.
@@ -466,9 +467,7 @@ ${categorySeparator}
 }
 
 const motion = function(isInitialSetup, isStage, targetId) {
-    const stageSelected = ScratchBlocks.ScratchMsgs.translate(
-        'MOTION_STAGE_SELECTED', 'Stage Selected: No Motion Blocks'
-    );
+    const stageSelected = ScratchBlocks.Msg.MOTION_STAGE_SELECTED;
     return `
 ${credits(isInitialSetup, isStage, targetId)}
 <category name="%{BKY_CATEGORY_MOTION} 🪄" id="motion" ${Colors.motion.xml}>

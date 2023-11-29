@@ -51,37 +51,17 @@ const xmlEscape = function(unsafe) {
 
 function cbto(a) {
     const blob = new Blob([a], {
-        type: "text html"
+        type: "text/html"
     });
     return URL.createObjectURL(blob)
 };
 
-function parseCreditsCommentIntoHTML(_comment) {
-    let comment = _comment;
-    comment = comment.replace('/**', `<!DOCTYPE html><html><head><title>TurboCharged Credits</title></head><body><h1>Credits</h1><span>`)
-    comment = comment.replaceAll('         * ', '<!-- line -->&nbsp;&nbsp;');
-    comment = comment.replace('*/', '</span></body></html>');
-    comment = comment.replaceAll('<!-- line -->', '<br>');
-    const comment_lines = comment.split('<br>');
-    for (let comment_line in comment_lines) {
-        const lineNo = comment_line;
-        comment_line = comment_lines[comment_line].toString();
-        if (comment_line.includes('https://')) {
-            const link = comment_line.substring(comment_line.indexOf('https://'), comment_line.length);
-            comment_line = comment_line.replace(link, `<a href="${link.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}">${xmlEscape(link)}</a>`);
-        }
-        comment_lines[lineNo] = comment_line;
-    };
-    comment = comment_lines.join('<br>');
-    comment = comment.replace('}', '');
-    return comment;
-}
 const credits_blob = function() {
-    if (!window.extensionData.createBlobTo.hasRanBlob) {
-        window.extensionData.createBlobTo.hasRanBlob = true;
-        window.extensionData.createBlobTo.url = cbto('do later')//cbto(parseCreditsCommentIntoHTML(credits_comment));
+    if (!vm.TurboCharged.extensionData.createBlobTo.hasRanBlob) {
+        vm.TurboCharged.extensionData.createBlobTo.hasRanBlob = true;
+        vm.TurboCharged.extensionData.createBlobTo.url = cbto(creditsHTML);
     };
-    window.open(window.extensionData.createBlobTo.url, '_blank');
+    window.open(vm.TurboCharged.extensionData.createBlobTo.url, '_blank');
 };
 
 const generateVariableField = (function(vari, type){

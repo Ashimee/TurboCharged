@@ -1,4 +1,45 @@
-//Credits in the "cred_comment" function.
+/**
+ * v9.3
+ * Idea by LilyMakesThings.
+ * XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.
+ * Smooshed by 0znzw
+ * 
+ * Color Change Attempt also by Lily, 0znzw for the XML.
+ * 
+ * Licensed under MIT license.
+ * 
+ * Extensions used:
+ * Text+ (by CST1229)
+ * Base (by TrueFantom)
+ * Bitwise (by TrueFantom)
+ * BigInt (by SkyHigh173)
+ * Math (by TrueFantom)
+ * Cast (by Lily aka LilyMakesThings)
+ * More Comparisons (by NOname-awa)
+ * Tween (by JeremyGamer13)
+ * High Precision (by Qxsck)
+ * More motion (by NamelessCat aka NexusKitten)
+ * Clones+ (by Lily aka LilyMakesThings)
+ * Sensing+ (by ObviousAlexC)
+ * 
+ * 
+ * Lily: https://scratch.mit.edu/users/LilyMakesThings/
+ * 0znzw: https://scratch.mit.edu/users/0znzw
+ * Xeltalliv: https://github.com/Xeltalliv
+ * CST1229: https://scratch.mit.edu/users/CST1229/
+ * Skyhigh173: https://github.com/SkyHigh173
+ * TrueFantom: https://scratch.mit.edu/users/TrueFantom/
+ * JeremyGamer13: https://scratch.mit.edu/users/JeremyGamer13/
+ * NOname-awa: https://github.com/NOname-awa
+ * Qxsck: https://github.com/qxsck
+ * NamelessCat: https://scratch.mit.edu/users/NamelessCat/
+ * ObviousAlexC: https://scratch.mit.edu/users/pinksheep2917/
+ * 
+ * Turbowarp: https://turbowarp.org/
+ * Extension gallery: https://extensions.turbowarp.org/
+ * Turbowarp Extension Github: https://github.com/Turbowarp/extensions
+ * 
+ */
 (function(Scratch) {'use strict';globalThis.Scratch = Scratch;
 // THIS WILL NOT ERROR IN THE ACTUAL CODE, TS IS BUGGIN MAN
 const ScratchBlocksClone_Internal = {
@@ -19,71 +60,110 @@ const ScratchBlocks = new Proxy(ScratchBlocksClone_Internal, {
     },
     get: function(e, a) {return e[a]}
 });
+const creditsHTML = `<!DOCTYPE html>
+<html>
+<head>
+<script></script><noscript></noscript>
+<title>TurboCharged</title>
+<style>
+code {
+    font-size: large;
+    font-weight: bold;
+    background-color: lightgray;
+    border: 2px #000 solid;
+}
+code.box {
+    display: box;
+}
+code.flex {
+    display: flex;
+}
+</style>
+</head>
+<body>
+<h1>TurboCharged</h1>
+<div id="top_creds">
+<code id="version" class="box">v9.3</code><span> || Functional and base Idea by LilyMakesThings.</span><br>
+<span id="injection_credits">XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.</span><br>
+<span id="other_main_credits">Update+Maintained by 0znzw<br><br>Color Change Attempt also by Lily, 0znzw for the XML.</span>
+</div>
+<div id="extensions">
+<span>Text+ (by CST1229)</span>
+<span>Base (by TrueFantom)</span>
+<span>Bitwise (by TrueFantom)</span>
+<span>BigInt (by SkyHigh173)</span>
+<span>Math (by TrueFantom)</span>
+<span>Cast (by Lily aka LilyMakesThings)</span>
+<span>More Comparisons (by NOname-awa)</span>
+<span>Tween (by JeremyGamer13)</span>
+<span>High Precision (by Qxsck)</span>
+<span>More motion (by NamelessCat aka NexusKitten)</span>
+<span>Clones+ (by Lily aka LilyMakesThings)</span>
+<span>Sensing+ (by ObviousAlexC)</span>
+</div>
+<div id="user_links">
+<h4>User links</h4>
+<span>Lily: https://scratch.mit.edu/users/LilyMakesThings/</span><br>
+<span>0znzw: https://scratch.mit.edu/users/0znzw/</span><br>
+<span>Xeltalliv: https://github.com/Xeltalliv/</span><br>
+<span>CST1229: https://scratch.mit.edu/users/CST1229/</span><br>
+<span>Skyhigh173: https://github.com/SkyHigh173/</span><br>
+<span>TrueFantom: https://scratch.mit.edu/users/TrueFantom/</span><br>
+<span>JeremyGamer13: https://scratch.mit.edu/users/JeremyGamer13/</span><br>
+<span>NOname-awa: https://github.com/NOname-awa/</span><br>
+<span>Qxsck: https://github.com/qxsck/</span><br>
+<span>NamelessCat: https://scratch.mit.edu/users/NamelessCat/</span><br>
+<span>ObviousAlexC: https://scratch.mit.edu/users/pinksheep2917/</span>
+</div>
+<div id="license"><h4>License</h4><code class="flex">
+Licensed under MIT license.<br>
+
+<!-- Initial copy: https://web.archive.org/web/20231129230145/https://opensource.org/license/mit/ -->
+<!-- Lily said to not include copyright so I will just put the date -->
+Maintained &lt;2023-2023&gt;<br>
+<br>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software<br>
+and associated documentation files (the "Software"), to deal in the Software without<br>
+restriction, including without limitation the rights to use, copy, modify, merge, publish,<br>
+distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the<br>
+Software is furnished to do so, subject to the following conditions:<br>
+<br>
+The above copyright notice and this permission notice shall be included in all copies<br>
+or substantial portions of the Software.<br>
+<br>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br>
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL<br>
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR<br>
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,<br>
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR<br>
+OTHER DEALINGS IN THE SOFTWARE.
+</code></div>
+</body>
+</html>`;
+const version = 9.3;
 window.Scratch = Scratch;
 const vm = Scratch.vm;
 const runtime = vm.runtime;
+vm.TurboCharged = {
+    extensionsData: {},
+    blockedCategories: ['data'],
+    enabled: true,
+    specialEnabled: true,
+    gbx: runtime.getBlocksXML.bind(runtime)
+};
 const categorySeparator = '<sep gap="36"/>';
 const blockSeparator = '<sep gap="36"/>';
-const gbx = runtime.getBlocksXML.bind(runtime);
 const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
 const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
 const eventsID = 'event';
 const Stage = runtime.getTargetForStage();
-const ArgumentType = Scratch.ArgumentType
+const ArgumentType = Scratch.ArgumentType;
 ArgumentType.VARIABLE = 'variable';
 ArgumentType.VERTICAL_SEPARATOR = 'vertical_separator';
 ArgumentType.VARIABLE_GETTER = 'variable_getter';
 ArgumentType.LABEL = 'label';
 ArgumentType.LABEL_SERIALIZABLE = 'label_serializable';
-
-//THE CREDITS
-    const cred_comment = (function(){/*this is here to get the comment*/
-        /**
-         * v9.2
-         * Idea by LilyMakesThings.
-         * XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.
-         * Smooshed by 0znzw
-         * 
-         * Color Change Attempt also by Lily, 0znzw for the XML.
-         * 
-         * Licensed under MIT license.
-         * 
-         * Extensions used:
-         * Text+ (by CST1229)
-         * Base (by TrueFantom)
-         * Bitwise (by TrueFantom)
-         * BigInt (by SkyHigh173)
-         * Math (by TrueFantom)
-         * Cast (by Lily aka LilyMakesThings)
-         * More Comparisons (by NOname-awa)
-         * Tween (by JeremyGamer13)
-         * High Precision (by Qxsck)
-         * More motion (by NamelessCat aka NexusKitten)
-         * Clones+ (by Lily aka LilyMakesThings)
-         * Sensing+ (by ObviousAlexC)
-         * 
-         * 
-         * Lily: https://scratch.mit.edu/users/LilyMakesThings/
-         * 0znzw: https://scratch.mit.edu/users/0znzw
-         * Xeltalliv: https://github.com/Xeltalliv
-         * CST1229: https://scratch.mit.edu/users/CST1229/
-         * Skyhigh173: https://github.com/SkyHigh173
-         * TrueFantom: https://scratch.mit.edu/users/TrueFantom/
-         * JeremyGamer13: https://scratch.mit.edu/users/JeremyGamer13/
-         * NOname-awa: https://github.com/NOname-awa
-         * Qxsck: https://github.com/qxsck
-         * NamelessCat: https://scratch.mit.edu/users/NamelessCat/
-         * ObviousAlexC: https://scratch.mit.edu/users/pinksheep2917/
-         * 
-         * Turbowarp: https://turbowarp.org/
-         * Extension gallery: https://extensions.turbowarp.org/
-         * Turbowarp Extension Github: https://github.com/Turbowarp/extensions
-         * 
-         */
-    });
-
-    const version = cred_comment.toString().split('        * v')[1].replace('\n', '');
-    const credits_comment = cred_comment.toString().replace('*/}', '*/').replace('function(){/*this is here to get the comment*/', '');
 
 let Colors = {
     generateXML: function(cat) {
@@ -104,7 +184,7 @@ Object.keys(ScratchBlocks.Colours).forEach(category => {
 Colors.events = structuredClone(Colors.event);
 Colors.sound = structuredClone(Colors.sounds);
 
-window.extensionData = {
+vm.TurboCharged.extensionData = {
     textPlus: {
         splitCache: [],
         matchCache: [],
@@ -415,37 +495,17 @@ const xmlEscape = function(unsafe) {
 
 function cbto(a) {
     const blob = new Blob([a], {
-        type: "text document"
+        type: "text/html"
     });
     return URL.createObjectURL(blob)
 };
 
-function parseCreditsCommentIntoHTML(_comment) {
-    let comment = _comment;
-    comment = comment.replace('/**', `<!DOCTYPE html><html><head><title>TurboCharged Credits</title></head><body><h1>Credits</h1><span>`)
-    comment = comment.replaceAll('         * ', '<!-- line -->&nbsp;&nbsp;');
-    comment = comment.replace('*/', '</span></body></html>');
-    comment = comment.replaceAll('<!-- line -->', '<br>');
-    const comment_lines = comment.split('<br>');
-    for (let comment_line in comment_lines) {
-        const lineNo = comment_line;
-        comment_line = comment_lines[comment_line].toString();
-        if (comment_line.includes('https://')) {
-            const link = comment_line.substring(comment_line.indexOf('https://'), comment_line.length);
-            comment_line = comment_line.replace(link, `<a href="${link.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}">${xmlEscape(link)}</a>`);
-        }
-        comment_lines[lineNo] = comment_line;
-    };
-    comment = comment_lines.join('<br>');
-    comment = comment.replace('}', '');
-    return comment;
-}
 const credits_blob = function() {
-    if (!window.extensionData.createBlobTo.hasRanBlob) {
-        window.extensionData.createBlobTo.hasRanBlob = true;
-        window.extensionData.createBlobTo.url = cbto(parseCreditsCommentIntoHTML(credits_comment));
+    if (!vm.TurboCharged.extensionData.createBlobTo.hasRanBlob) {
+        vm.TurboCharged.extensionData.createBlobTo.hasRanBlob = true;
+        vm.TurboCharged.extensionData.createBlobTo.url = cbto(creditsHTML);
     };
-    window.open(window.extensionData.createBlobTo.url, '_blank');
+    window.open(vm.TurboCharged.extensionData.createBlobTo.url, '_blank');
 };
 
 const generateVariableField = (function(vari, type){
@@ -2421,7 +2481,7 @@ class TurboChargedMotion {
         credits_blob();
     }
     credit_version() {
-        return parseInt(version.toString());
+        return version;
     }
     /* end credit blocks and start variables */
     /* this block of code is for the variables category */
@@ -2623,6 +2683,7 @@ class TurboChargedCredits {
 const credits = function(isInitialSetup, isStage, targetId) {
     return `
 <category name="Credits 🪄" id="credits" colour="#ffb6c1" secondaryColour="#ffc0cb"> //oooooo :D
+<label text="/!\\ THIS IS ENGLISH ONLY /!\\"></label>
 <button text="Credits" callbackKey="EXTENSION_CALLBACK" callbackData="motion_credit"></button>
 <block type="motion_credit_version">
 <mutation blockInfo='{"blockType":"reporter","terminal":false,"blockAllThreads":false,"arguments":{},"opcode":"credit_version","text":"TurboCharged Version","isDynamic":true,"color1":"#ffb6c1","isTerminal":false,"disableMonitor":true}'/> // this was extremely annoying but worth it.
@@ -2632,9 +2693,7 @@ ${categorySeparator}
 }
 
 const motion = function(isInitialSetup, isStage, targetId) {
-    const stageSelected = ScratchBlocks.ScratchMsgs.translate(
-        'MOTION_STAGE_SELECTED', 'Stage Selected: No Motion Blocks'
-    );
+    const stageSelected = ScratchBlocks.Msg.MOTION_STAGE_SELECTED;
     return `
 ${credits(isInitialSetup, isStage, targetId)}
 <category name="%{BKY_CATEGORY_MOTION} 🪄" id="motion" ${Colors.motion.xml}>
@@ -2892,7 +2951,7 @@ class TurboChargedOperators {
             blocks: [{
                     opcode: 'percentof',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: 'what is [PERCENT]% of [AMOUNT]?',
+                    text: '[PERCENT]% of [AMOUNT]?',
                     disableMonitor: true,
                     arguments: {
                         PERCENT: {
@@ -2939,7 +2998,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: 'percentUD',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: 'what is [AMOUNT] [MODE] by [PERCENT]%?',
+                    text: '[AMOUNT] [MODE] by [PERCENT]%?',
                     disableMonitor: true,
                     arguments: {
                         AMOUNT: {
@@ -3274,7 +3333,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: "textplusunicodeof",
                     blockType: Scratch.BlockType.REPORTER,
-                    text: "Unicode of [STRING]",
+                    text: "unicode of [STRING]",
                     arguments: {
                         STRING: {
                             type: Scratch.ArgumentType.STRING,
@@ -3284,7 +3343,7 @@ class TurboChargedOperators {
                 }, {
                     opcode: "textplusunicodefrom",
                     blockType: Scratch.BlockType.REPORTER,
-                    text: "Unicode [NUM] as letter",
+                    text: "unicode [NUM] as letter",
                     arguments: {
                         NUM: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -3397,7 +3456,7 @@ class TurboChargedOperators {
                         TEXTCASE: {
                             type: Scratch.ArgumentType.STRING,
                             menu: "textCase",
-                            defaultValue: window.extensionData.textPlus.CaseParam.LOWERCASE
+                            defaultValue: vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE
                         }
                     }
                 }, {
@@ -3412,7 +3471,7 @@ class TurboChargedOperators {
                         TEXTCASE: {
                             type: Scratch.ArgumentType.STRING,
                             menu: "textCase",
-                            defaultValue: window.extensionData.textPlus.CaseParam.UPPERCASE
+                            defaultValue: vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE
                         }
                     }
                 }, {
@@ -3486,19 +3545,19 @@ class TurboChargedOperators {
                     acceptReporters: true,
                     items: [{
                         text: "lowercase",
-                        value: window.extensionData.textPlus.CaseParam.LOWERCASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE
                     }, {
                         text: "UPPERCASE",
-                        value: window.extensionData.textPlus.CaseParam.UPPERCASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE
                     }, {
                         text: "Title Case",
-                        value: window.extensionData.textPlus.CaseParam.TITLECASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.TITLECASE
                     }, {
                         text: "Exactly Title Case",
-                        value: window.extensionData.textPlus.CaseParam.EXACTTITLECASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.EXACTTITLECASE
                     }, {
                         text: "MiXeD CaSe",
-                        value: window.extensionData.textPlus.CaseParam.MIXEDCASE
+                        value: vm.TurboCharged.extensionData.textPlus.CaseParam.MIXEDCASE
                     }]
                 },
                 castType: {
@@ -3728,18 +3787,18 @@ class TurboChargedOperators {
         args.ITEM = Number(args.ITEM) || 0;
         // Cache the last split
         if (!(
-                window.extensionData.textPlus.splitCache &&
-                window.extensionData.textPlus.splitCache.string === args.STRING &&
-                window.extensionData.textPlus.splitCache.split === args.SPLIT
+                vm.TurboCharged.extensionData.textPlus.splitCache &&
+                vm.TurboCharged.extensionData.textPlus.splitCache.string === args.STRING &&
+                vm.TurboCharged.extensionData.textPlus.splitCache.split === args.SPLIT
             )) {
             const regex = this._caseInsensitiveRegex(args.SPLIT);
-            window.extensionData.textPlus.splitCache = {
+            vm.TurboCharged.extensionData.textPlus.splitCache = {
                 string: args.STRING,
                 split: args.SPLIT,
                 arr: args.STRING.split(regex)
             };
         }
-        return window.extensionData.textPlus.splitCache.arr[args.ITEM - 1] || "";
+        return vm.TurboCharged.extensionData.textPlus.splitCache.arr[args.ITEM - 1] || "";
     }
     textpluscount(args, util) {
         // Fill cache
@@ -3748,7 +3807,7 @@ class TurboChargedOperators {
             STRING: args.STRING,
             ITEM: 0
         }, util);
-        return (window.extensionData.textPlus.splitCache.arr.length - 1) || 0;
+        return (vm.TurboCharged.extensionData.textPlus.splitCache.arr.length - 1) || 0;
     }
     textplusreplace(args, util) {
         args.STRING = args.STRING.toString();
@@ -3795,21 +3854,21 @@ class TurboChargedOperators {
             args.ITEM = Number(args.ITEM) || 0;
             // Cache the last matched string
             if (!(
-                    window.extensionData.textPlus.matchCache &&
-                    window.extensionData.textPlus.matchCache.string === args.STRING &&
-                    window.extensionData.textPlus.matchCache.regex === args.REGEX &&
-                    window.extensionData.textPlus.matchCache.flags === args.FLAGS
+                    vm.TurboCharged.extensionData.textPlus.matchCache &&
+                    vm.TurboCharged.extensionData.textPlus.matchCache.string === args.STRING &&
+                    vm.TurboCharged.extensionData.textPlus.matchCache.regex === args.REGEX &&
+                    vm.TurboCharged.extensionData.textPlus.matchCache.flags === args.FLAGS
                 )) {
                 const newFlags = args.FLAGS.includes("g") ? args.FLAGS : args.FLAGS + "g";
                 const regex = new RegExp(args.REGEX, newFlags);
-                window.extensionData.textPlus.matchCache = {
+                vm.TurboCharged.extensionData.textPlus.matchCache = {
                     string: args.STRING,
                     regex: args.REGEX,
                     flags: args.FLAGS,
                     arr: args.STRING.match(regex) || []
                 };
             }
-            return window.extensionData.textPlus.matchCache.arr[args.ITEM - 1] || "";
+            return vm.TurboCharged.extensionData.textPlus.matchCache.arr[args.ITEM - 1] || "";
         } catch (e) {
             console.error(e);
             return "";
@@ -3820,7 +3879,7 @@ class TurboChargedOperators {
         // (ITEM is casted into 0,
         // but we don't care about the return value)
         this.matchRegex(args, util);
-        return window.extensionData.textPlus.matchCache.arr.length || 0;
+        return vm.TurboCharged.extensionData.textPlus.matchCache.arr.length || 0;
     }
     textplustestRegex(args, util) {
         try {
@@ -3837,22 +3896,22 @@ class TurboChargedOperators {
         const string = args.STRING.toString();
         const textCase = args.TEXTCASE.toString();
         switch (textCase) {
-            case window.extensionData.textPlus.CaseParam.LOWERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE:
                 return string.toLowerCase() === string;
-            case window.extensionData.textPlus.CaseParam.UPPERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE:
                 return string.toUpperCase() === string;
-            case window.extensionData.textPlus.CaseParam.MIXEDCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.MIXEDCASE:
                 return (!(
                     string.toUpperCase() === string ||
                     string.toLowerCase() === string
                 ));
-            case window.extensionData.textPlus.CaseParam.TITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.TITLECASE:
                 return string.split(/\b/g).every((word) => {
                     if (!word) return true;
                     const titleCased = word[0].toUpperCase() + word.substring(1);
                     return word === titleCased;
                 });
-            case window.extensionData.textPlus.CaseParam.EXACTTITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.EXACTTITLECASE:
                 return string.split(/\b/g).every((word) => {
                     if (!word) return true;
                     const titleCased = word[0].toUpperCase() + word.substring(1).toLowerCase();
@@ -3866,22 +3925,22 @@ class TurboChargedOperators {
         const string = args.STRING.toString();
         const textCase = args.TEXTCASE.toString();
         switch (textCase) {
-            case window.extensionData.textPlus.CaseParam.LOWERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.LOWERCASE:
                 return string.toLowerCase();
-            case window.extensionData.textPlus.CaseParam.UPPERCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.UPPERCASE:
                 return string.toUpperCase();
-            case window.extensionData.textPlus.CaseParam.MIXEDCASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.MIXEDCASE:
                 return Array.from(string).map(
                     (char, index) => index % 2 === 0 ?
                     char.toUpperCase() :
                     char.toLowerCase()
                 ).join("");
-            case window.extensionData.textPlus.CaseParam.TITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.TITLECASE:
                 return string.split(/\b/g).map((word) => {
                     if (!word) return '';
                     return word[0].toUpperCase() + word.substring(1);
                 }).join("");
-            case window.extensionData.textPlus.CaseParam.EXACTTITLECASE:
+            case vm.TurboCharged.extensionData.textPlus.CaseParam.EXACTTITLECASE:
                 return string.split(/\b/g).map((word) => {
                     if (!word) return '';
                     return word[0].toUpperCase() + word.substring(1).toLowerCase();
@@ -5353,8 +5412,9 @@ function addMicrobitBlocks() {
 //XML Injector / Overrider
 runtime.getBlocksXML = function(target) {
     const categoryInfo = this._blockInfo;
-    const res = gbx(target);
+    const res = vm.TurboCharged.gbx(target);
     res.map(category => {
+        if (vm.TurboCharged.blockedCategories.includes(category.id) || !vm.TurboCharged.enabled) return category;
         if (category.id === 'motion') {
             let {
                 editingTarget: target,

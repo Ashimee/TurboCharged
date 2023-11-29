@@ -1,5 +1,6 @@
 vm.on('EXTENSION_ADDED', e => {
     function testBlocks() {
+        if (!vm.TurboCharged.specialEnabled) return;
         if (e.id === 'microbit') addMicrobitBlocks();
         if (e.id === 'pen') addPenBlocks();
     }

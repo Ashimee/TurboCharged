@@ -10,6 +10,11 @@ with open('./GENERATION BASE.js', 'r') as file:
     generated = file.read()
 
 #adding ScratchBlocks deepfake
+print('Adding Credits..')
+with open('./credits.js', 'r') as file:
+    generated = generated.replace('//credits', file.read())
+
+#adding ScratchBlocks deepfake
 print('Adding ScratchBlocks')
 with open('./scratch-blocks.js', 'r') as file:
     generated = generated.replace('//scratch blocks', file.read())

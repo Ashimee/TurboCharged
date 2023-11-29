@@ -1,65 +1,107 @@
+const creditsHTML = `<!DOCTYPE html>
+<html>
+<head>
+<script></script><noscript></noscript>
+<title>TurboCharged</title>
+<style>
+code {
+    font-size: large;
+    font-weight: bold;
+    background-color: lightgray;
+    border: 2px #000 solid;
+}
+code.box {
+    display: box;
+}
+code.flex {
+    display: flex;
+}
+</style>
+</head>
+<body>
+<h1>TurboCharged</h1>
+<div id="top_creds">
+<code id="version" class="box">v9.3</code><span> || Functional and base Idea by LilyMakesThings.</span><br>
+<span id="injection_credits">XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.</span><br>
+<span id="other_main_credits">Update+Maintained by 0znzw<br><br>Color Change Attempt also by Lily, 0znzw for the XML.</span>
+</div>
+<div id="extensions">
+<span>Text+ (by CST1229)</span>
+<span>Base (by TrueFantom)</span>
+<span>Bitwise (by TrueFantom)</span>
+<span>BigInt (by SkyHigh173)</span>
+<span>Math (by TrueFantom)</span>
+<span>Cast (by Lily aka LilyMakesThings)</span>
+<span>More Comparisons (by NOname-awa)</span>
+<span>Tween (by JeremyGamer13)</span>
+<span>High Precision (by Qxsck)</span>
+<span>More motion (by NamelessCat aka NexusKitten)</span>
+<span>Clones+ (by Lily aka LilyMakesThings)</span>
+<span>Sensing+ (by ObviousAlexC)</span>
+</div>
+<div id="user_links">
+<h4>User links</h4>
+<span>Lily: https://scratch.mit.edu/users/LilyMakesThings/</span><br>
+<span>0znzw: https://scratch.mit.edu/users/0znzw/</span><br>
+<span>Xeltalliv: https://github.com/Xeltalliv/</span><br>
+<span>CST1229: https://scratch.mit.edu/users/CST1229/</span><br>
+<span>Skyhigh173: https://github.com/SkyHigh173/</span><br>
+<span>TrueFantom: https://scratch.mit.edu/users/TrueFantom/</span><br>
+<span>JeremyGamer13: https://scratch.mit.edu/users/JeremyGamer13/</span><br>
+<span>NOname-awa: https://github.com/NOname-awa/</span><br>
+<span>Qxsck: https://github.com/qxsck/</span><br>
+<span>NamelessCat: https://scratch.mit.edu/users/NamelessCat/</span><br>
+<span>ObviousAlexC: https://scratch.mit.edu/users/pinksheep2917/</span>
+</div>
+<div id="license"><h4>License</h4><code class="flex">
+Licensed under MIT license.<br>
 
-        /**
-         * v9.2
-         * Idea by LilyMakesThings.
-         * XML Injection based on Xeltallivs and LilyMakesThings XML Injectors.
-         * Smooshed by 0znzw
-         * 
-         * Color Change Attempt also by Lily, 0znzw for the XML.
-         * 
-         * Licensed under MIT license.
-         * 
-         * Extensions used:
-         * Text+ (by CST1229)
-         * Base (by TrueFantom)
-         * Bitwise (by TrueFantom)
-         * BigInt (by SkyHigh173)
-         * Math (by TrueFantom)
-         * Cast (by Lily aka LilyMakesThings)
-         * More Comparisons (by NOname-awa)
-         * Tween (by JeremyGamer13)
-         * High Precision (by Qxsck)
-         * More motion (by NamelessCat aka NexusKitten)
-         * Clones+ (by Lily aka LilyMakesThings)
-         * Sensing+ (by ObviousAlexC)
-         * 
-         * 
-         * Lily: https://scratch.mit.edu/users/LilyMakesThings/
-         * 0znzw: https://scratch.mit.edu/users/0znzw
-         * Xeltalliv: https://github.com/Xeltalliv
-         * CST1229: https://scratch.mit.edu/users/CST1229/
-         * Skyhigh173: https://github.com/SkyHigh173
-         * TrueFantom: https://scratch.mit.edu/users/TrueFantom/
-         * JeremyGamer13: https://scratch.mit.edu/users/JeremyGamer13/
-         * NOname-awa: https://github.com/NOname-awa
-         * Qxsck: https://github.com/qxsck
-         * NamelessCat: https://scratch.mit.edu/users/NamelessCat/
-         * ObviousAlexC: https://scratch.mit.edu/users/pinksheep2917/
-         * 
-         * Turbowarp: https://turbowarp.org/
-         * Extension gallery: https://extensions.turbowarp.org/
-         * Turbowarp Extension Github: https://github.com/Turbowarp/extensions
-         * 
-         */
-
+<!-- Initial copy: https://web.archive.org/web/20231129230145/https://opensource.org/license/mit/ -->
+<!-- Lily said to not include copyright so I will just put the date -->
+Maintained &lt;2023-2023&gt;<br>
+<br>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software<br>
+and associated documentation files (the "Software"), to deal in the Software without<br>
+restriction, including without limitation the rights to use, copy, modify, merge, publish,<br>
+distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the<br>
+Software is furnished to do so, subject to the following conditions:<br>
+<br>
+The above copyright notice and this permission notice shall be included in all copies<br>
+or substantial portions of the Software.<br>
+<br>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br>
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL<br>
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR<br>
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,<br>
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR<br>
+OTHER DEALINGS IN THE SOFTWARE.
+</code></div>
+</body>
+</html>`;
+const version = 9.3;
 window.Scratch = Scratch;
 const vm = Scratch.vm;
 const runtime = vm.runtime;
+vm.TurboCharged = {
+    extensionsData: {},
+    blockedCategories: ['data'],
+    enabled: true,
+    specialEnabled: true,
+    gbx: runtime.getBlocksXML.bind(runtime)
+};
 const categorySeparator = '<sep gap="36"/>';
 const blockSeparator = '<sep gap="36"/>';
-const gbx = runtime.getBlocksXML.bind(runtime);
 const translate = ScratchBlocks.ScratchMsgs.translate; // due to it being in some of the category's, i will from now on have this.
 const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
 const eventsID = 'event';
 const Stage = runtime.getTargetForStage();
-const ArgumentType = Scratch.ArgumentType
+const ArgumentType = Scratch.ArgumentType;
 ArgumentType.VARIABLE = 'variable';
 ArgumentType.VERTICAL_SEPARATOR = 'vertical_separator';
 ArgumentType.VARIABLE_GETTER = 'variable_getter';
 ArgumentType.LABEL = 'label';
 ArgumentType.LABEL_SERIALIZABLE = 'label_serializable';
-
-    const version = 9.2;
 
 let Colors = {
     generateXML: function(cat) {
@@ -80,7 +122,7 @@ Object.keys(ScratchBlocks.Colours).forEach(category => {
 Colors.events = structuredClone(Colors.event);
 Colors.sound = structuredClone(Colors.sounds);
 
-window.extensionData = {
+vm.TurboCharged.extensionData = {
     textPlus: {
         splitCache: [],
         matchCache: [],
