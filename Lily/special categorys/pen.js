@@ -11,7 +11,7 @@ function addPenBlocks() {
 
     //ext.test = function({  }, util) {}
     ext.getInfo = function() {
-        const DefaultExtensions = window.extensionData.DefaultExtensions;
+        const DefaultExtensions = vm.TurboCharged.extensionData.DefaultExtensions;
         let tmp = egi();
         let blocks = tmp.blocks;
         tmp.name = "Pen 🪄";

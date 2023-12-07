@@ -47,7 +47,7 @@ function addMicrobitBlocks() {
     return MATRIX.charAt(((ROW-1)*5)+(COLLUM-1));
   }
     ext.getInfo = function() {
-        const DefaultExtensions = window.extensionData.DefaultExtensions;
+        const DefaultExtensions = vm.TurboCharged.extensionData.DefaultExtensions;
         let tmp = egi();
         let blocks = tmp.blocks;
         tmp.name = "micro:bit 🪄";

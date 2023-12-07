@@ -1,4 +1,4 @@
-MINIFY = True
+MINIFY = False
 USE_URL = True
 
 import os
@@ -61,6 +61,8 @@ for filename in os.listdir("./special categorys"):
     with open(f'./special categorys/{filename}', 'r') as file:
         print('added file: ', filename)
         specials = '{}{}'.format(specials, file.read())
+with open('./register special categorys.js', 'r') as file:
+    specials = '{}{}'.format(specials, file.read())
 generated = generated.replace('//SPECIAL CATEGORYS', specials)
 
 #optional minifying
