@@ -147,10 +147,66 @@ const vm = Scratch.vm;
 const runtime = vm.runtime;
 vm.TurboCharged = {
     extensionsData: {},
-    blockedCategories: ['data'],
+    blockedCategories: [],
     enabled: true,
     specialEnabled: true,
-    gbx: runtime.getBlocksXML.bind(runtime)
+    gbx: runtime.getBlocksXML.bind(runtime),
+    patchedVariableField: false,
+    patchVariableField() { try {
+        // thanks godslayerakp for helping
+        // https://github.com/PenguinMod/PenguinMod-Blocks/blob/develop/core/field_variable.js#L104
+        (function(){
+            const ScratchBlocks = this.ScratchBlocks;
+            ScratchBlocks.FieldVariable.prototype.initModel = function() {
+                if (this.variable_) {
+                    return; // Initialization already happened.
+                }
+                this.workspace_ = this.sourceBlock_.workspace;
+                const isList = function() {
+                    let inPalette = false;
+                    let block = null;
+                    const target = vm.editingTarget.blocks;
+                    const flyout = vm.runtime.flyoutBlocks;
+                    const workspaceBlock = this.sourceBlock_;
+                    const targetBlock = target.getBlock(workspaceBlock.id);
+                    const flyoutBlock = flyout.getBlock(workspaceBlock.id);
+                    if (!!!targetBlock) inPalette = true;
+                    if (inPalette) block = flyoutBlock;
+                    else block = targetBlock;
+                    if (inPalette) {
+                        const isData = (block.id.split('_')[0] === 'data');
+                        if (!isData) return false;
+                        return block.fields.hasOwnProperty('LIST');
+                    }
+                    return false;
+                }.bind(this);
+                // Initialize this field if it's in a broadcast block in the flyout
+                var variable = ScratchBlocks.Variables.getVariable(this.workspace_, this.defaultVariableName, null, this.defaultType_);
+                var vars;
+                if (isList()) vars = this.workspace_.getVariablesOfType('list');
+                else vars = this.workspace_.getVariablesOfType('');
+                if (this.workspace_.isFlyout && !variable && vars.length > 0) {
+                    vars.sort(ScratchBlocks.VariableModel.compareByName);
+                    variable = vars[0];
+                }
+                if (vars.length < 1) {
+                    variable = ScratchBlocks.Variables.getOrCreateVariablePackage(
+                        this.workspace_, null, this.defaultVariableName, this.defaultType_);
+                }
+                // Don't fire a change event for this setValue.  It would have null as the
+                // old value, which is not valid.
+                ScratchBlocks.Events.disable();
+                try {
+                    this.setValue(variable.getId());
+                } finally {
+                    ScratchBlocks.Events.enable();
+                }
+            }
+        }).call(window);
+    } catch(err) {
+        console.warn('Failed to patch variable field.');
+        console.error(err);
+    }}
 };
 const categorySeparator = '<sep gap="36"/>';
 const blockSeparator = '<sep gap="36"/>';
@@ -5398,7 +5454,7 @@ function addMicrobitBlocks() {
 
     //ext.test = function({  }, util) {}
     ext.getInfo = function() {
-        const DefaultExtensions = window.extensionData.DefaultExtensions;
+        const DefaultExtensions = vm.TurboCharged.extensionData.DefaultExtensions;
         let tmp = egi();
         let blocks = tmp.blocks;
         tmp.name = "Pen 🪄";
@@ -5496,6 +5552,8 @@ runtime.getBlocksXML = function(target) {
             const stage = runtime.getTargetForStage();
             if (!target) target = stage;
             category.xml = variables(false, target);
+            if (!vm.TurboCharged.patchedVariableField) vm.TurboCharged.patchVariableField();
+            vm.TurboCharged.patchedVariableField = true;
         }
         if (category.id === 'myBlocks') {
             let {

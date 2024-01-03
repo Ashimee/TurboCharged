@@ -77,6 +77,8 @@ runtime.getBlocksXML = function(target) {
             const stage = runtime.getTargetForStage();
             if (!target) target = stage;
             category.xml = variables(false, target);
+            if (!vm.TurboCharged.patchedVariableField) vm.TurboCharged.patchVariableField();
+            vm.TurboCharged.patchedVariableField = true;
         }
         if (category.id === 'myBlocks') {
             let {
